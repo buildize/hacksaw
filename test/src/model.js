@@ -77,6 +77,15 @@ describe('Model', () => {
       User.put({ id: 5 });
       expect(User.first.constructor).to.eq(User);
     });
+
+    it('overrides by last key', () => {
+      const user1 = User.put({ id: 15 });
+      const user2 = User.new({ id: 15 });
+      expect(user1.uuid).to.not.eq(user2.uuid);
+      User.put(user2);
+      expect(user1.uuid).to.eq(user2.uuid);
+      expect(user1).to.eq(user2.reload());
+    });
   });
 
   describe('#new', () => {

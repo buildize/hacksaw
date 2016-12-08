@@ -55,7 +55,7 @@ export default class Model {
     }
 
     let index;
-    this.$keys.forEach(key => {
+    this.$keys.reverse().forEach(key => {
       if (!index) index = this.items.findIndex(i => i[key] === item[key]);
     });
 
@@ -78,5 +78,14 @@ export default class Model {
     Object.keys(values).forEach(key => {
       this[key] = values[key];
     });
+  }
+
+  reload() {
+    let index;
+    this.constructor.$keys.reverse().forEach(key => {
+      if (!index) index = this.constructor.items.findIndex(i => i[key] === this[key]);
+    });
+
+    return this.constructor.items[index];
   }
 }

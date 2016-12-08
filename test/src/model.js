@@ -98,6 +98,35 @@ describe('Model', () => {
     });
   });
 
+  describe('#clean', () => {
+    class AModel extends Model {
+      @key id;
+    }
+
+    it('cleans context', () => {
+      AModel.context('test').put({ id: 1 });
+      AModel.context('test2').put({ id: 1 });
+      expect(AModel.context('test').all.length).to.eq(1);
+      AModel.context('test').clean();
+      expect(AModel.context('test').all.length).to.eq(0);
+      expect(AModel.context('test2').all.length).to.eq(1);
+    });
+
+    it('returns context class', () => {
+      expect(AModel.context('test').clean()).to.eq(AModel.context('test'));
+    });
+
+    it('cleans global items', () => {
+      expect(AModel.all.length).to.eq(1);
+      AModel.clean();
+      expect(AModel.all.length).to.eq(0);
+    });
+
+    it('returns base class', () => {
+      expect(AModel.clean()).to.eq(AModel);
+    });
+  });
+
   describe('.set', () => {
     class User extends Model {
       id = 15;

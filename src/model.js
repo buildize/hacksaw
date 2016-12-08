@@ -45,6 +45,11 @@ export default class Model {
 
         return this;
       }
+
+      static clean() {
+        this.citems = [];
+        return this;
+      }
     }
     return this.contexts[name];
   }
@@ -66,6 +71,11 @@ export default class Model {
     }
 
     return item;
+  }
+
+  static clean() {
+    this.__items = [];
+    return this;
   }
 
   static new(values) {

@@ -1,11 +1,14 @@
 {
   "name": "hacksaw",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "mocha test/src/**/*.js",
-    "test:coverage": "istanbul cover --report html _mocha -- test/src/**/*.js ; open ./coverage/index.html"
+    "test:coverage": "istanbul cover --report html _mocha -- test/src/**/*.js ; open ./coverage/index.html",
+    "build": "babel src --out-dir lib",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
     "babel-core": "6.9.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-es2015": "6.9.0",

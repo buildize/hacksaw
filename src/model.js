@@ -16,7 +16,9 @@ export default class Model {
     return this.all[0];
   }
 
-  static context(name) {
+  static context(...args) {
+    const name = JSON.stringify(args);
+
     this.contexts = this.contexts || {};
     if (this.contexts[name]) return this.contexts[name];
 

@@ -17,6 +17,10 @@ describe('Model', () => {
     it('returns different context with different models', () => {
       expect(User.context('test')).to.not.eq(Article.context('test'));
     });
+
+    it('can accept multiple parameters', () => {
+      expect(User.context('1', '2')).to.not.eq(User.context('1', '3'));
+    })
   });
 
   describe('#all', () => {

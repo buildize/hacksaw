@@ -1,5 +1,5 @@
 export default (target, key, descriptor) => {
   target.constructor.$keys = target.constructor.$keys || [];
   target.constructor.$keys.push(key);
-  descriptor.writable = true;
+  if (!descriptor.get) descriptor.writable = true;
 }

@@ -76,16 +76,18 @@ export default class Model {
 
     let index;
     this.$keys.reverse().forEach(key => {
-      if (!index) index = this.items.findIndex(i => i[key] === item[key]);
+      if (!index || index === -1) {
+        index = this.items.findIndex(i => i[key] === item[key]);
+      }
     });
 
     if (index !== -1) {
       Object.assign(this.items[index], item);
+      return this.items[index];
     } else {
       this.items.push(item);
+      return item;
     }
-
-    return item;
   }
 
   static clean() {

@@ -86,6 +86,11 @@ describe('Model', () => {
       expect(user1.uuid).to.eq(user2.uuid);
       expect(user1).to.eq(user2.reload());
     });
+
+    it('can accept array', () => {
+      User.context('array').put([{ id: 1 }, { id: 2 }]);
+      expect(User.context('array').all.length).to.eq(2);
+    });
   });
 
   describe('#new', () => {

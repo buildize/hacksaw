@@ -1,5 +1,6 @@
 import each from 'lodash/each';
 import cloneDeep from 'lodash/cloneDeep';
+import isArray from 'lodash/isArray';
 
 export default class Model {
   static get items() {
@@ -32,8 +33,18 @@ export default class Model {
       }
 
       static put(item) {
-        const result = super.put(item);
-        if (!this.citems.find(i => i === result)) this.citems.push(result);
+        let result = super.put(item);
+        const arrayResult = isArray(result);
+        if (!arrayResult) result = [result];
+
+        result.forEach(resultItem => {
+          if (!this.citems.find(i => i === resultItem)) {
+            this.citems.push(resultItem);
+          }
+        });
+
+        if (arrayResult) return result;
+        return result[0];
       }
 
       static populate(fn) {
@@ -55,6 +66,10 @@ export default class Model {
   }
 
   static put(item) {
+    if (isArray(item)) {
+      return item.map(i => this.put(i));
+    }
+
     if (item.constructor !== this) {
       item = this.new(item);
     }

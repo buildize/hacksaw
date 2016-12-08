@@ -1,4 +1,5 @@
 {
+  "name": "hacksaw",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/src/**/*.js",
@@ -17,5 +18,6 @@
   },
   "dependencies": {
     "lodash": "^4.16.4"
-  }
+  },
+  "version": "0.0.1"
 }

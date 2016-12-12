@@ -109,6 +109,19 @@ export default class Model {
     });
   }
 
+  getSetter(...props) {
+    return value => {
+      let deepProps = 'ctx';
+
+      props.forEach(prop => {
+        deepProps += `["${prop}"]`;
+      });
+
+      const fn = new Function('ctx', 'val', 'deepProps', `${deepProps} = val`);
+      fn(this, value, deepProps);
+    }
+  }
+
   reload() {
     let index;
     this.constructor.$keys.reverse().forEach(key => {

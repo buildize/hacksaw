@@ -150,4 +150,27 @@ describe('Model', () => {
       expect(user.another).to.eq('test');
     });
   });
+
+  describe('.getSetter', () => {
+    class User extends Model {}
+
+    it('sets value correctly', () => {
+      const user = new User();
+      user.getSetter('name')('hello');
+      expect(user.name).to.eq('hello');
+    });
+
+    it('sets deeply', () => {
+      const user = new User();
+      user.items = [{}, { others: [{}, {}], another: {} }];
+      
+      user.getSetter('items', 0, 'name')('test');
+      user.getSetter('items', 1, 'others', 1, 'number')(15);
+      user.getSetter('items', 1, 'another', 'array')([1,2,3]);
+
+      expect(user.items[0].name).to.eq('test');
+      expect(user.items[1].others[1].number).to.eq(15);
+      expect(user.items[1].another.array).to.eql([1,2,3]);
+    });
+  });
 });

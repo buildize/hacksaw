@@ -1,5 +1,6 @@
-HACKSAW
-=======
+![](logo.png)
+
+<br />
 
 Hacksaw is a data store library for javascript. You can store all the states
 along the app life time. For example you can store all search results without

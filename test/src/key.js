@@ -1,6 +1,7 @@
-import { Model, key } from '../../src';
+import { store, key } from '../../src';
 
-class User extends Model {
+@store
+class User {
   @key uuid;
   @key id;
 

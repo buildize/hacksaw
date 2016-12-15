@@ -79,10 +79,10 @@ Everything else is your custom methods:
 ```javascript
 // models/product.js
 
-import { Model, key } from 'hacksaw';
+import { store, key } from 'hacksaw';
 import axios from 'axios';
 
-class Product extends Model {
+@store class Product {
   @key id;
 
   // this is our custom static method

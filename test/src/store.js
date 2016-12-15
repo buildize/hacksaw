@@ -1,10 +1,10 @@
-import { Model, key } from '../../src';
+import { store, key } from '../../src';
 import uuid from 'uuid/v4';
 
-describe('Model', () => {
+describe('store', () => {
   describe('#context', () => {
-    class User extends Model {}
-    class Article extends Model {}
+    @store class User {}
+    @store class Article {}
 
     it('returns same context', () => {
       expect(User.context('test')).to.eq(User.context('test'));
@@ -24,11 +24,11 @@ describe('Model', () => {
   });
 
   describe('#all', () => {
-    class User extends Model {
+    @store
+    class User {
       @key id;
 
       constructor(id) {
-        super();
         this.id = id;
       }
     }
@@ -48,11 +48,13 @@ describe('Model', () => {
   });
 
   describe('#populate', () => {
-    class User extends Model {
+    @store
+    class User {
       @key id;
     }
 
-    class Article extends Model {
+    @store
+    class Article {
       @key id;
     }
 
@@ -72,7 +74,8 @@ describe('Model', () => {
   });
 
   describe('#put', () => {
-    class User extends Model {
+    @store
+    class User {
       @key uuid = uuid();
       @key id;
     }
@@ -112,7 +115,7 @@ describe('Model', () => {
   });
 
   describe('#new', () => {
-    class AModel extends Model {}
+    @store class AModel {}
 
     it('sets correct values', () => {
       const item = AModel.new({ id: 5, name: 15 });
@@ -122,7 +125,7 @@ describe('Model', () => {
   });
 
   describe('#clean', () => {
-    class AModel extends Model {
+    @store class AModel {
       @key id;
     }
 
@@ -151,7 +154,7 @@ describe('Model', () => {
   });
 
   describe('#listen', () => {
-    class User extends Model {}
+    @store class User {}
 
     it('adds function to callbacks without context', () => {
       const fn = () => ({});
@@ -174,7 +177,7 @@ describe('Model', () => {
   });
 
   describe('.set', () => {
-    class User extends Model {
+    @store class User {
       id = 15;
       another = 'test';
     };
@@ -197,7 +200,7 @@ describe('Model', () => {
   });
 
   describe('.getSetter', () => {
-    class User extends Model {}
+    @store class User {}
 
     it('sets value correctly', () => {
       const user = new User();
@@ -228,7 +231,7 @@ describe('Model', () => {
   });
 
   describe('.listen', () => {
-    class User extends Model {}
+    @store class User {}
 
     it('adds function to callbacks correctly', () => {
       const fn = () => ({});

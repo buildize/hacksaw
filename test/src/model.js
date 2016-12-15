@@ -95,6 +95,20 @@ describe('Model', () => {
       User.context('array').put([{ id: 1 }, { id: 2 }]);
       expect(User.context('array').all.length).to.eq(2);
     });
+
+    it('runs callbacks without context', () => {
+      const spy = sinon.spy();
+      User.listen(spy);
+      User.put([{ id: 1 }, { id: 2 }]);
+      expect(spy.calledOnce).to.be.true;
+    });
+
+    it('runs callbacks without context', () => {
+      const spy = sinon.spy();
+      User.context('hey').listen(spy);
+      User.context('hey').put([{ id: 1 }, { id: 2 }]);
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('#new', () => {
@@ -136,6 +150,29 @@ describe('Model', () => {
     });
   });
 
+  describe('#listen', () => {
+    class User extends Model {}
+
+    it('adds function to callbacks without context', () => {
+      const fn = () => ({});
+      User.listen(fn);
+      expect(User.__callbacks).to.eql([fn]);
+    });
+
+    it('adds function to callbacks with context', () => {
+      const fn = () => ({});
+      User.context('hello').listen(fn);
+      User.context('hello').listen(fn);
+      expect(User.context('hello').__callbacks).to.eql([fn, fn]);
+    });
+
+    it('returns instance', () => {
+      const fn = () => ({});
+      expect(User.listen(fn)).to.eq(User);
+      expect(User.context('hello').listen(fn)).to.eq(User.context('hello'));
+    });
+  });
+
   describe('.set', () => {
     class User extends Model {
       id = 15;
@@ -148,6 +185,14 @@ describe('Model', () => {
       expect(user.id).to.eq(5);
       expect(user.name).to.eq('albert');
       expect(user.another).to.eq('test');
+    });
+
+    it('runs callbacks', () => {
+      const spy = sinon.spy();
+      const user = new User();
+      user.listen(spy);
+      user.set({ name: 'test' });
+      expect(spy.calledOnce).to.be.true;
     });
   });
 
@@ -163,7 +208,7 @@ describe('Model', () => {
     it('sets deeply', () => {
       const user = new User();
       user.items = [{}, { others: [{}, {}], another: {} }];
-      
+
       user.getSetter('items', 0, 'name')('test');
       user.getSetter('items', 1, 'others', 1, 'number')(15);
       user.getSetter('items', 1, 'another', 'array')([1,2,3]);
@@ -171,6 +216,31 @@ describe('Model', () => {
       expect(user.items[0].name).to.eq('test');
       expect(user.items[1].others[1].number).to.eq(15);
       expect(user.items[1].another.array).to.eql([1,2,3]);
+    });
+
+    it('runs callbacks', () => {
+      const spy = sinon.spy();
+      const user = new User();
+      user.listen(spy);
+      user.getSetter('name')('value');
+      expect(spy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('.listen', () => {
+    class User extends Model {}
+
+    it('adds function to callbacks correctly', () => {
+      const fn = () => ({});
+      const user = new User();
+      user.listen(fn);
+      expect(user.__callbacks).to.eql([fn]);
+    });
+
+    it('returns instance', () => {
+      const fn = () => ({});
+      const user = new User();
+      expect(user.listen(fn)).to.eq(user);
     });
   });
 });

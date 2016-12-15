@@ -3,9 +3,16 @@ import cloneDeep from 'lodash/cloneDeep';
 import isArray from 'lodash/isArray';
 
 export default class Model {
+  __callbacks = [];
+
   static get items() {
     this.__items = this.__items || [];
     return this.__items;
+  }
+
+  static get __callbacks() {
+    this.___callbacks = this.___callbacks || [];
+    return this.___callbacks;
   }
 
   static get all() {
@@ -25,6 +32,7 @@ export default class Model {
     this.items; // call once to build items;
     this.contexts[name] = class extends this {
       static citems = [];
+      static ___callbacks = [];
 
       static get all() {
         return this.citems;
@@ -36,6 +44,7 @@ export default class Model {
 
       static put(item) {
         let result = super.put(item);
+        
         const arrayResult = isArray(result);
         if (!arrayResult) result = [result];
 
@@ -67,9 +76,15 @@ export default class Model {
     return this.contexts[name];
   }
 
-  static put(item) {
+  static put(...args) {
+    return this.__put(...args);
+  }
+
+  static __put(item, trigger = true) {
     if (isArray(item)) {
-      return item.map(i => this.put(i));
+      const result = item.map(i => this.__put(i, false));
+      this.trigger();
+      return result;
     }
 
     if (item.constructor !== this) {
@@ -83,13 +98,19 @@ export default class Model {
       }
     });
 
+    let result;
+
     if (index !== -1) {
       Object.assign(this.items[index], item);
-      return this.items[index];
+      result = this.items[index];
     } else {
       this.items.push(item);
-      return item;
+      result = item;
     }
+
+    if (trigger) this.trigger();
+
+    return result;
   }
 
   static clean() {
@@ -103,10 +124,21 @@ export default class Model {
     return instance;
   }
 
+  static listen(fn) {
+    this.__callbacks.push(fn);
+    return this;
+  }
+
+  static trigger() {
+    this.__callbacks.forEach(fn => fn());
+  }
+
   set(values = {}) {
     Object.keys(values).forEach(key => {
       this[key] = values[key];
     });
+
+    this.trigger();
   }
 
   getSetter(...props) {
@@ -119,7 +151,17 @@ export default class Model {
 
       const fn = new Function('ctx', 'val', 'deepProps', `${deepProps} = val`);
       fn(this, value, deepProps);
+      this.trigger();
     }
+  }
+
+  listen(callback) {
+    this.__callbacks.push(callback);
+    return this;
+  }
+
+  trigger() {
+    this.__callbacks.forEach(fn => fn());
   }
 
   reload() {

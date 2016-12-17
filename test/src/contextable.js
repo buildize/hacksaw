@@ -25,4 +25,10 @@ describe('contextable', () => {
     expect(A.context('node1', 'node2').staticMethod()).to.eq('static');
     expect(instance.instanceMethod()).to.eq('instance');
   });
+
+  it ('set instance contexts correctly', () => {
+    @contextable class B {}
+    const instance = new (B.context('n1', 'n2'));
+    expect(instance.context).to.eq(B.context('n1', 'n2'));
+  })
 })

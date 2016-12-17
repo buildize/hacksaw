@@ -3,6 +3,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha test/src/**/*.js",
+    "test:path": "mocha",
     "test:coverage": "istanbul cover --report html _mocha -- test/src/**/*.js ; open ./coverage/index.html",
     "build": "babel src --out-dir lib",
     "prepublish": "npm run build"

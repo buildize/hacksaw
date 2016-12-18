@@ -8,7 +8,7 @@
     "build": "babel src --out-dir lib",
     "prepublish": "npm run build",
     "docs:prepare": "gitbook install",
-    "docs:watch": "npm run docs:prepare && gitbook serve",
+    "docs:watch": "npm run docs:prepare && gitbook serve"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

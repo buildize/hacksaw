@@ -1,6 +1,6 @@
 {
   "gitbook": ">=3.2.1",
   "title": "Hacksaw",
-  "plugins": [],
+  "plugins": ["prism", "-highlight"],
   "pluginsConfig": {}
 }

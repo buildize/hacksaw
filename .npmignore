@@ -2,5 +2,6 @@
 /coverage
 /src
 /test
+/_book
 .babelrc
 .DS_Store

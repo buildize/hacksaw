@@ -1,0 +1,6 @@
+{
+  "gitbook": ">=3.2.1",
+  "title": "Hacksaw",
+  "plugins": [],
+  "pluginsConfig": {}
+}

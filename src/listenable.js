@@ -22,7 +22,6 @@ export default (klass) => {
 
     static trigger() {
       this.callbacks.forEach(fn => fn());
-      if (this.parent) this.parent.trigger();
       return this;
     }
   }

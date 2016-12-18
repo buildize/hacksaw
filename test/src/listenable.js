@@ -72,20 +72,5 @@ describe('listenable', () => {
       @listenable class A {}
       expect(A.trigger()).to.eq(A);
     });
-
-    it ('triggers parent', () => {
-      @listenable class A {}
-      class B extends A { static parent = A }
-
-      const spy1 = sinon.spy();
-      const spy2 = sinon.spy();
-
-      A.listen(spy1);
-      B.listen(spy2);
-      B.trigger();
-
-      expect(spy1.calledOnce).to.be.true;
-      expect(spy2.calledOnce).to.be.true;
-    });
   });
 });

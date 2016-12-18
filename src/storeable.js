@@ -25,6 +25,7 @@ export default klass => {
 
     static clean() {
       this.all.splice(0, this.all.length);
+      this.trigger && this.trigger();
       return this;
     }
 

@@ -37,6 +37,13 @@ describe('storeable', () => {
       @storeable class A {}
       expect(A.clean()).to.eq(A);
     });
+
+    it ('triggers callbacks', () => {
+      @storeable @listenable class A {}
+      const spy = sinon.spy();
+      A.listen(spy).clean();
+      expect(spy.calledOnce).to.be.true;
+    });
   });
 
   describe('.put', () => {

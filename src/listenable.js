@@ -20,8 +20,9 @@ export default klass => {
       return this;
     }
 
-    static trigger() {
+    static trigger(parents = false) {
       this.callbacks.forEach(fn => fn());
+      if (parents && this.parent.parent) this.parent.trigger(true);
       return this;
     }
   }

@@ -82,7 +82,7 @@ export default klass => {
         });
       }
 
-      this.trigger && this.trigger();
+      this.trigger();
 
       return result;
     }

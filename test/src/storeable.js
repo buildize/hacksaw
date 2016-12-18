@@ -23,6 +23,22 @@ describe('storeable', () => {
     })
   });
 
+  describe('.clean', () => {
+    it ('cleans store correctly', () => {
+      @storeable class A {}
+      A.put({ id: 1 });
+      A.put({ id: 2 });
+      A.clean();
+
+      expect(A.all.length).to.eq(0);
+    });
+
+    it ('returns class', () => {
+      @storeable class A {}
+      expect(A.clean()).to.eq(A);
+    });
+  });
+
   describe('.put', () => {
     it ('not duplicate items', () => {
       @storeable class A {}

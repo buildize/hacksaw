@@ -23,6 +23,11 @@ export default klass => {
       return this.all[this.all.length - 1];
     }
 
+    static clean() {
+      this.all.splice(0, this.all.length);
+      return this;
+    }
+
     static put(items) {
       if (!isArray(items)) return this.put([items])[0];
       let result;

@@ -60,7 +60,7 @@ export default klass => {
         items.forEach(item => {
           if (item.constructor !== this) {
             var instance = new this;
-            Object.assign(instance, item);
+            instance.set(item, false);
           } else {
             var instance = item;
           }

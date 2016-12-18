@@ -27,6 +27,13 @@ describe('modelable', () => {
       @model class A {}
       expect(A.context('a').set({})).to.eq(A.context('a'));
     });
+
+    it ('stores keys', () => {
+      @model class A {}
+      const instance = new A;
+      instance.set({ a: 1, b: 2 });
+      expect(instance.__keys).to.eql({ a: true, b: true });
+    });
   });
 
   describe('#set', () => {
@@ -76,6 +83,36 @@ describe('modelable', () => {
       A.context('a').listen(spy);
       instance.getSetter('b')(2);
       expect(spy.calledOnce).to.be.true;
+    });
+
+    it ('stores keys', () => {
+      @model class A {}
+      const instance = new A;
+      instance.getSetter('c')('u');
+      expect(instance.__keys).to.eql({ c: true });
+    });
+  });
+
+  describe('#toObject', () => {
+    it ('serialize only set keys', () => {
+      @model class A {}
+      const instance = new A;
+      instance.set({ a: 1, b: 2 });
+      instance.c = 4;
+      expect(instance.toObject()).to.eql({ a: 1, b: 2 });
+    });
+  });
+
+  describe('.toArray', () => {
+    it ('returns array correctly', () => {
+      @model class A {}
+      A.put({ id: 1, name: 'name1' });
+      A.put({ id: 2, name: 'name2' });
+
+      expect(A.toArray()).to.eql([
+        { id: 1, name: 'name1' },
+        { id: 2, name: 'name2' }
+      ]);
     });
   });
 });

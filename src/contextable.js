@@ -16,7 +16,7 @@ export default klass => {
 
     static context(...args) {
       if (args.length === 1) {
-        const name = args[0];
+        const name = JSON.stringify(args[0]);
 
         this.contexts[name] = this.contexts[name] || class extends this {
           static contexts = {};

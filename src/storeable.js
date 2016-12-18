@@ -1,4 +1,5 @@
 import isArray from 'lodash/isArray';
+import clone from 'lodash/clone';
 
 export default klass => {
   return class extends klass {
@@ -30,9 +31,14 @@ export default klass => {
     }
 
     static populate(fn) {
-      if (this.all.length) return this;
       const base = this.firstContext;
-      this.put(base.all.filter(fn));
+      this.all.push(...base.all.filter(fn));
+      return this;
+    }
+
+    static clone(fn) {
+      const base = this.firstContext;
+      this.all.push(...base.all.filter(fn).map(i => clone(i)));
       return this;
     }
 

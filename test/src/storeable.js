@@ -48,16 +48,6 @@ describe('storeable', () => {
   });
 
   describe('.populate', () => {
-    it ('not populate if store is not empty', () => {
-      @storeable class A {}
-      class B extends A { static parent = A }
-      A.put({ id: 1 });
-      B.put({ id: 2 });
-      B.populate(i => i.id === 1);
-      expect(B.all.length).to.eq(1);
-      expect(B.first.id).to.eq(2);
-    });
-
     it ('populates correctly', () => {
       @contextable @storeable class A {}
       class B extends A { static parent = A }
@@ -67,8 +57,23 @@ describe('storeable', () => {
       C.populate(i => i.id === 1);
 
       expect(C.all).to.eql([instance]);
-      expect(C.populate(i => i.id)).to.eq(C);
       expect(B.populate(i => i.id)).to.eq(B);
+    });
+  });
+
+  describe('.clone', () => {
+    it ('clones correctly', () => {
+      @contextable @storeable class A {}
+      class B extends A { static parent = A }
+      class C extends B { static parent = B }
+      A.put({ id: 0 });
+      const instance = A.put({ id: 1 });
+      C.clone(i => i.id === 1);
+
+      expect(C.all.length).to.eq(1);
+      expect(C.all[0].id).to.eq(instance.id);
+      expect(C.all[0]).to.not.eq(instance);
+      expect(B.clone(i => i.id)).to.eq(B);
     });
   });
 

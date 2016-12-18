@@ -1,12 +1,10 @@
-import storeable from '../../src/storeable';
-import listenable from '../../src/listenable';
-import contextable from '../../src/contextable';
+import { model } from '../../src';
 import uuid from 'uuid/v4';
 
 describe('storeable', () => {
   describe('.all', () => {
     it ('stores different array for every child classes', () => {
-      @storeable class A {}
+      @model class A {}
       class B extends A {}
 
       expect(A.all).to.not.eq(B.all);
@@ -15,7 +13,7 @@ describe('storeable', () => {
 
   describe('.first, .last', () => {
     it ('returns first and last object of the store', () => {
-      @storeable class A {}
+      @model class A {}
       const instance1 = A.put({ id: 1 });
       const instance2 = A.put({ id: 2 });
 
@@ -26,7 +24,7 @@ describe('storeable', () => {
 
   describe('.clean', () => {
     it ('cleans store correctly', () => {
-      @storeable class A {}
+      @model class A {}
       A.put({ id: 1 });
       A.put({ id: 2 });
       A.clean();
@@ -35,12 +33,12 @@ describe('storeable', () => {
     });
 
     it ('returns class', () => {
-      @storeable class A {}
+      @model class A {}
       expect(A.clean()).to.eq(A);
     });
 
     it ('triggers callbacks', () => {
-      @storeable @listenable class A {}
+      @model class A {}
       const spy = sinon.spy();
       A.listen(spy).clean();
       expect(spy.calledOnce).to.be.true;
@@ -49,7 +47,7 @@ describe('storeable', () => {
 
   describe('.populate', () => {
     it ('populates correctly', () => {
-      @contextable @storeable class A {}
+      @model class A {}
       class B extends A { static parent = A }
       class C extends B { static parent = B }
       A.put({ id: 0 });
@@ -63,7 +61,7 @@ describe('storeable', () => {
 
   describe('.clone', () => {
     it ('clones correctly', () => {
-      @contextable @storeable class A {}
+      @model class A {}
       class B extends A { static parent = A }
       class C extends B { static parent = B }
       A.put({ id: 0 });
@@ -79,7 +77,7 @@ describe('storeable', () => {
 
   describe('.put', () => {
     it ('not duplicate items', () => {
-      @storeable class A {}
+      @model class A {}
 
       const instance1 = new A();
       instance1.id = 1;
@@ -97,19 +95,19 @@ describe('storeable', () => {
     });
 
     it ('puts new instances if argument is plain object', () => {
-      @storeable class A {}
+      @model class A {}
       A.put({ id: 1, name: 'test' });
       expect(A.all[0].constructor).to.eq(A);
     });
 
     it ('returns items back', () => {
-      @storeable class A {}
+      @model class A {}
       expect(A.put({ id: 1 }).id).to.eq(1);
       expect(A.put([{ id: 1 }])[0].id).to.eq(1);
     });
 
     it ('overrides by first key', () => {
-      @storeable class A {
+      @model class A {
         static keys = ['id', 'uuid'];
         uuid = uuid();
       }
@@ -123,7 +121,7 @@ describe('storeable', () => {
     });
 
     it ('updates parent items', () => {
-      @storeable class A {}
+      @model class A {}
       class B extends A { static parent = A; }
 
       const instance1 = A.put({ id: 1 });
@@ -136,7 +134,7 @@ describe('storeable', () => {
     });
 
     it ('triggers listeners', () => {
-      @storeable @listenable class A {}
+      @model class A {}
       class B extends A { static parent = A }
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();

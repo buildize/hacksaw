@@ -46,7 +46,7 @@ export default klass => {
       if (!isArray(items)) return this.put([items])[0];
       let result;
 
-      if (this.parent) {
+      if (this.parent.parent) {
         result = this.parent.put(items);
         result.forEach(item => {
           const index = this.all.findIndex(i => i === item);

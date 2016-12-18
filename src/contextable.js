@@ -7,7 +7,7 @@ export default klass => {
     }
 
     static __getFirstContext() {
-      if (this.parent) {
+      if (this.parent.parent) {
         return this.parent.__getFirstContext();
       } else {
         return this;

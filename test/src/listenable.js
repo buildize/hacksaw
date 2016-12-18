@@ -1,9 +1,9 @@
-import listenable from '../../src/listenable';
+import { model } from '../../src';
 
 describe('listenable', () => {
   describe('.listen', () => {
     it ('adds callback correctly', () => {
-      @listenable class A {}
+      @model class A {}
       const fn1 = () => ({});
       const fn2 = () => ({});
 
@@ -14,12 +14,12 @@ describe('listenable', () => {
     });
 
     it ('returns the class', () => {
-      @listenable class A {}
+      @model class A {}
       expect(A.listen(() => ({}))).to.eq(A);
     });
 
     it ('has different callbacks for extended classes', () => {
-      @listenable class A {}
+      @model class A {}
       class B extends A {}
 
       const fn1 = () => ({});
@@ -35,7 +35,7 @@ describe('listenable', () => {
 
   describe('.unlisten', () => {
     it ('removes listener correctly', () => {
-      @listenable class A {}
+      @model class A {}
       const fn1 = () => ({});
       const fn2 = () => ({});
 
@@ -47,14 +47,14 @@ describe('listenable', () => {
     });
 
     it ('returns the class', () => {
-      @listenable class A {}
+      @model class A {}
       expect(A.unlisten(() => ({}))).to.eq(A);
     });
   });
 
   describe('.trigger', () => {
     it ('fires callbacks correctly', () => {
-      @listenable class A {}
+      @model class A {}
 
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
@@ -69,7 +69,7 @@ describe('listenable', () => {
     });
 
     it ('returns the class', () => {
-      @listenable class A {}
+      @model class A {}
       expect(A.trigger()).to.eq(A);
     });
   });

@@ -1,4 +1,4 @@
-export default (klass) => {
+export default klass => {
   return class extends klass {
     static get callbacks() {
       if (this.__callback_class !== this) {

@@ -1,5 +1,6 @@
 import storeable from '../../src/storeable';
 import listenable from '../../src/listenable';
+import contextable from '../../src/contextable';
 import uuid from 'uuid/v4';
 
 describe('storeable', () => {
@@ -43,6 +44,31 @@ describe('storeable', () => {
       const spy = sinon.spy();
       A.listen(spy).clean();
       expect(spy.calledOnce).to.be.true;
+    });
+  });
+
+  describe('.populate', () => {
+    it ('not populate if store is not empty', () => {
+      @storeable class A {}
+      class B extends A { static parent = A }
+      A.put({ id: 1 });
+      B.put({ id: 2 });
+      B.populate(i => i.id === 1);
+      expect(B.all.length).to.eq(1);
+      expect(B.first.id).to.eq(2);
+    });
+
+    it ('populates correctly', () => {
+      @contextable @storeable class A {}
+      class B extends A { static parent = A }
+      class C extends B { static parent = B }
+      A.put({ id: 0 });
+      const instance = A.put({ id: 1 });
+      C.populate(i => i.id === 1);
+
+      expect(C.all).to.eql([instance]);
+      expect(C.populate(i => i.id)).to.eq(C);
+      expect(B.populate(i => i.id)).to.eq(B);
     });
   });
 

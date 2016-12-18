@@ -29,6 +29,13 @@ export default klass => {
       return this;
     }
 
+    static populate(fn) {
+      if (this.all.length) return this;
+      const base = this.firstContext;
+      this.put(base.all.filter(fn));
+      return this;
+    }
+
     static put(items) {
       if (!isArray(items)) return this.put([items])[0];
       let result;

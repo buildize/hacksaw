@@ -2,6 +2,18 @@ export default klass => {
   return class extends klass {
     static contexts = {}
 
+    static get firstContext() {
+      return this.__getFirstContext();
+    }
+
+    static __getFirstContext() {
+      if (this.parent) {
+        return this.parent.__getFirstContext();
+      } else {
+        return this;
+      }
+    }
+
     static context(...args) {
       if (args.length === 1) {
         const name = args[0];

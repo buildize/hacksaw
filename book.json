@@ -1,6 +1,14 @@
 {
   "gitbook": ">=3.2.1",
   "title": "Hacksaw",
-  "plugins": ["prism", "-highlight"],
-  "pluginsConfig": {}
+  "plugins": ["edit-link", "forkmegithub", "prism", "-highlight"],
+  "pluginsConfig": {
+    "edit-link": {
+      "base": "https://github.com/Buildize/hacksaw/tree/master",
+      "label": "Edit This Page"
+    },
+    "forkmegithub": {
+      "url": "https://github.com/Buildize/hacksaw/"
+    }
+  }
 }

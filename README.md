@@ -12,12 +12,16 @@ The idea behind Hacksaw is contextual store which means you have one store which
 you can generate sub stores using contexts and also all model instances will be
 shared among contexts.
 
+![](diagram.png)
+
 ### Installation
 ```
 npm install hacksaw --save
 ```
 
 ### Example
+> See more example on http://hacksaw-examples.open.buildize.com
+
 ```javascript
 import { store } from 'hacksaw';
 

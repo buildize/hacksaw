@@ -12,10 +12,10 @@ Store.unlisten(callback);
 
 ### Example
 ```javascript
-@store class Product {}
+@store class ProductStore {}
 
 const myCallback = () => doSomething();
 
-Product.listen(myCallback);
-Product.unlisten(myCallback);
+ProductStore.listen(myCallback);
+ProductStore.unlisten(myCallback);
 ```

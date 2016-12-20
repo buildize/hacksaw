@@ -12,4 +12,3 @@
   * [.clone](/docs/methods/clone.md)
   * [.listen](/docs/methods/listen.md)
   * [.unlisten](/docs/methods/unlisten.md)
-  * [.toArray](/docs/methods/to-array.md)

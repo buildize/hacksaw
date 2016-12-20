@@ -12,15 +12,15 @@ Store.set(object); // returns Context
 
 ### Example
 ```javascript
-@store class Product {}
+@store class ProductStore {}
 
-Product.listen(() => {
+ProductStore.listen(() => {
   // re-render component etc.
 });
 
-Product.set({ isLoading: true });
-Product.isLoading; // true;
+ProductStore.set({ isLoading: true });
+ProductStore.isLoading; // true;
 
-Product.context('ctx').set({ myValue: 15 });
-Product.context('ctx').myValue; // 15
+ProductStore.context('ctx').set({ myValue: 15 });
+ProductStore.context('ctx').myValue; // 15
 ```

@@ -21,23 +21,23 @@ npm install hacksaw --save
 ```javascript
 import { store } from 'hacksaw';
 
-@store class Product {}
+@store class ProductStore {}
 
-Product.all; // []
-Product.context('best').all; // []
-Product.context('trending').all; // []
-
-//-----
-Product.context('best').put({ id: 1, name: 'A book' });
-Product.context('trending').put({ id: 2, name: 'Trending book' });
-Product.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
-Product.context('best').all; // [{ id: 1, name: 'A book' }]
+ProductStore.all; // []
+ProductStore.context('best').all; // []
+ProductStore.context('trending').all; // []
 
 //-----
-Product.context('another-context').populate(i => i.id === 1);
-Product.context('another-context').first === Product.first // true;
+ProductStore.context('best').put({ id: 1, name: 'A book' });
+ProductStore.context('trending').put({ id: 2, name: 'Trending book' });
+ProductStore.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
+ProductStore.context('best').all; // [{ id: 1, name: 'A book' }]
+
+//-----
+ProductStore.context('another-context').populate(i => i.id === 1);
+ProductStore.context('another-context').first === ProductStore.first // true;
 
 //----
-Product.context('trending').clean().all // [];
-Product.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
+ProductStore.context('trending').clean().all // [];
+ProductStore.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
 ```

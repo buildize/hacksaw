@@ -20,13 +20,13 @@ ProductStore.context('search'); // returns new class extends Product.
 You can use all methods on the store
 
 ```javascript
-@store class Product {
+@store class ProductStore {
   static myMethod() {
     return 'my value';
   }
 }
 
-Product.context('aContext').myMethod(); // 'my value'
+ProductStore.context('aContext').myMethod(); // 'my value'
 ```
 
 <br />
@@ -34,7 +34,7 @@ Product.context('aContext').myMethod(); // 'my value'
 It always returns the same class
 
 ```javascript
-Product.context('c1', 'c2') === Product.context('c1', 'c2') // true
+ProductStore.context('c1', 'c2') === ProductStore.context('c1', 'c2') // true
 ```
 
 ### Example

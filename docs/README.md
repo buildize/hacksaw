@@ -1,6 +1,7 @@
 # Table of Contents
 
 * [Read Me](/README.md)
+* [Creating Store](/docs/creating-store.md)
 * Methods
   * [.context](/docs/methods/context.md)
   * [.set](/docs/methods/set.md)

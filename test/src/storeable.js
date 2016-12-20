@@ -100,18 +100,21 @@ describe('storeable', () => {
       expect(A.put([{ id: 1 }])[0].id).to.eq(1);
     });
 
-    it ('overrides by first key', () => {
+    it ('use getKey method if it exists', () => {
       @store class A {
-        static keys = ['id', 'uuid'];
-        uuid = uuid();
+        static getKey(object) {
+          return object.oid;
+        }
       }
 
-      const instance1 = A.put({ id: 15 });
-      const instance2 = A.put({ id: 15 });
-      const instance3 = A.put({ uuid: instance2.uuid });
+      const instance1 = A.put({ id: 1, oid: 1 });
+      const instance2 = A.put({ id: 1, oid: 2 });
+      const instance3 = A.put({ id: 1, oid: 3 });
+      const instance4 = A.put({ id: 3, oid: 3 });
 
-      expect(instance1).to.eq(instance2);
-      expect(instance2).to.eq(instance3);
+      expect(instance1).to.not.eq(instance2);
+      expect(instance3).to.eq(instance4);
+      expect(instance4.id).to.eq(3);
     });
 
     it ('updates parent items', () => {

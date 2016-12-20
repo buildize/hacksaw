@@ -13,6 +13,8 @@
   * [.clone](/docs/methods/clone.md)
   * [.listen](/docs/methods/listen.md)
   * [.unlisten](/docs/methods/unlisten.md)
+* Overridable Methods
+  * [.getKey](/docs/methods/get-key.md)
 * [Hacksaw React](https://www.github.com/Buildize/hacksaw-react)
 * [Example Projects](http://hacksaw-examples.open.buildize.com)
 * [Buildize Twitter](https://twitter.com/Buildize)

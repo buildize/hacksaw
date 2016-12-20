@@ -58,10 +58,11 @@ export default klass => {
         result = [];
 
         items.forEach(item => {
-          let index = -1;
-          this._keys.forEach(key => {
-            if (index === -1) {
-              index = this.all.findIndex(i => i[key] === item[key]);
+          const index = this.all.findIndex(i => {
+            if (this.getKey) {
+              return this.getKey(i) === this.getKey(item);
+            } else {
+              return i.id === item.id;
             }
           });
 

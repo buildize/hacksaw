@@ -1,9 +1,9 @@
-import { model } from '../../src';
+import { store } from '../../src';
 
 describe('modelable', () => {
   describe('.set', () => {
     it ('sets context values correctly', () => {
-      @model class A {}
+      @store class A {}
       A.set({ b: 1 });
       A.context('hello').set({ d: 2 });
       expect(A.b).to.eq(1);
@@ -11,7 +11,7 @@ describe('modelable', () => {
     });
 
     it ('triggers with all parent contexts', () => {
-      @model class A {}
+      @store class A {}
       const spy1 = sinon.spy();
       const spy2 = sinon.spy();
 
@@ -24,12 +24,12 @@ describe('modelable', () => {
     });
 
     it ('returns itself', () => {
-      @model class A {}
+      @store class A {}
       expect(A.context('a').set({})).to.eq(A.context('a'));
     });
 
     it ('stores keys', () => {
-      @model class A {}
+      @store class A {}
       const instance = new A;
       instance.set({ a: 1, b: 2 });
       expect(instance.__keys).to.eql({ a: true, b: true });
@@ -38,7 +38,7 @@ describe('modelable', () => {
 
   describe('#set', () => {
     it('sets values correctly', () => {
-      @model class A {}
+      @store class A {}
       const instance = new A;
       instance.set({ a: 1, b: 2 });
       expect(instance.a).to.eq(1);
@@ -46,7 +46,7 @@ describe('modelable', () => {
     });
 
     it('triggers the context', () => {
-      @model class A {}
+      @store class A {}
       const instance = new (A.context('a', 'b'));
       const spy = sinon.spy();
       A.context('a','b').listen(spy);
@@ -56,7 +56,7 @@ describe('modelable', () => {
   });
 
   describe('#getSetter', () => {
-    @model class A {}
+    @store class A {}
 
     it('sets value correctly', () => {
       const instance = new A();
@@ -86,7 +86,7 @@ describe('modelable', () => {
     });
 
     it ('stores keys', () => {
-      @model class A {}
+      @store class A {}
       const instance = new A;
       instance.getSetter('c')('u');
       expect(instance.__keys).to.eql({ c: true });
@@ -95,7 +95,7 @@ describe('modelable', () => {
 
   describe('#toObject', () => {
     it ('serialize only set keys', () => {
-      @model class A {}
+      @store class A {}
       const instance = new A;
       instance.set({ a: 1, b: 2 });
       instance.c = 4;
@@ -105,7 +105,7 @@ describe('modelable', () => {
 
   describe('.toArray', () => {
     it ('returns array correctly', () => {
-      @model class A {}
+      @store class A {}
       A.put({ id: 1, name: 'name1' });
       A.put({ id: 2, name: 'name2' });
 

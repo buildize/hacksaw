@@ -100,7 +100,7 @@ describe('storeable', () => {
       expect(A.put([{ id: 1 }])[0].id).to.eq(1);
     });
 
-    it ('use getKey method if it exists', () => {
+    it ('uses getKey method if it exists', () => {
       @store class A {
         static getKey(object) {
           return object.oid;
@@ -115,6 +115,39 @@ describe('storeable', () => {
       expect(instance1).to.not.eq(instance2);
       expect(instance3).to.eq(instance4);
       expect(instance4.id).to.eq(3);
+    });
+
+    it ('uses merge method if it exists', () => {
+      @store class A {
+        static merge(currentItem, nextItem) {
+          const obj = {
+            ...currentItem,
+            ...nextItem
+          };
+
+          delete(obj.useless);
+          return obj;
+        }
+      }
+
+      @store class B {
+        static merge(currentItem, nextItem) {
+          Object.assign(currentItem, nextItem);
+          delete(currentItem.useless);
+        }
+      }
+
+      const instance1 = A.put({ id: 1, oid: 1 });
+      const instance2 = A.context('hello').put({ id: 1, oid: 2, useless: true, extra: 15 });
+      const instance3 = B.put({ id: 1, oid: 1 });
+      const instance4 = B.put({ id: 1, oid: 2, useless: true });
+
+      expect(instance1).to.not.eq(instance2);
+      expect(instance1.extra).to.undefined;
+      expect(instance2.extra).to.eq(15);
+      expect(instance2.useless).to.be.undefined;
+      expect(instance3).to.eq(instance4);
+      expect(instance3.useless).to.be.undefined;
     });
 
     it ('updates parent items', () => {

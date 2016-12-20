@@ -70,7 +70,16 @@ export default klass => {
             this.all.push(item);
             result.push(item);
           } else {
-            Object.assign(this.all[index], item);
+            if (this.merge) {
+              const mergedObject = this.merge(this.all[index], item);
+
+              if (mergedObject) {
+                this.all[index] = mergedObject;
+              }
+            } else {
+              Object.assign(this.all[index], item);
+            }
+
             result.push(this.all[index]);
           }
         });

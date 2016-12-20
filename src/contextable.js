@@ -21,7 +21,6 @@ export default klass => {
         this.contexts[name] = this.contexts[name] || class extends this {
           static contexts = {};
           static parent = this;
-          context = this.constructor.parent.contexts[name];
         }
 
         return this.contexts[name];

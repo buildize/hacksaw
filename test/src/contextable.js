@@ -26,12 +26,6 @@ describe('contextable', () => {
     expect(instance.instanceMethod()).to.eq('instance');
   });
 
-  it ('set instance contexts correctly', () => {
-    @store class B {}
-    const instance = new (B.context('n1', 'n2'));
-    expect(instance.context).to.eq(B.context('n1', 'n2'));
-  });
-
   it ('accepts object arguments', () => {
     @store class A {}
     expect(A.context('n', { a: 1 })).to.eq(A.context('n', { a: 1 }));

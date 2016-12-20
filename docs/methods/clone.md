@@ -6,7 +6,7 @@ function.
 
 ### Usage
 ```javascript
-Model.clone(filterFunction)
+Store.clone(filterFunction)
 
 // returns the context
 ```
@@ -18,7 +18,7 @@ it using clones.
 
 ### Example
 ```javascript
-@model class Product {}
+@store class Product {}
 
 // lets add some item to the store first.
 Product.put([{ id: 1, count: 4 }, { id: 2, count: 5 }, { id: 3, count: 6 }]);
@@ -30,12 +30,12 @@ Product.context('my-context').all // []
 Product.context('my-context').clone(item => item.count % 2 === 0);
 
 // lets see the last data of the store context
-Product.context('my-context').all // [Product(id: 1, count: 4), Product(id: 3, count: 6)]
+Product.context('my-context').all // [Object(id: 1, count: 4), Object(id: 3, count: 6)]
 
 // or we could use it with chain
 Product.context('another')
        .clone(i => i.id > 2)
-       .all // [Product(id: 3, count: 6)]
+       .all // [Object(id: 3, count: 6)]
 
 // the items will have the same data but instances will be different
 Product.context('my-context').last === Product.context('another').last // false

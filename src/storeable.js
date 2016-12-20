@@ -58,25 +58,18 @@ export default klass => {
         result = [];
 
         items.forEach(item => {
-          if (item.constructor !== this) {
-            var instance = new this;
-            instance.set(item, false);
-          } else {
-            var instance = item;
-          }
-
           let index = -1;
           this._keys.forEach(key => {
             if (index === -1) {
-              index = this.all.findIndex(i => i[key] === instance[key]);
+              index = this.all.findIndex(i => i[key] === item[key]);
             }
           });
 
           if (index === -1) {
-            this.all.push(instance);
-            result.push(instance);
+            this.all.push(item);
+            result.push(item);
           } else {
-            Object.assign(this.all[index], instance);
+            Object.assign(this.all[index], item);
             result.push(this.all[index]);
           }
         });

@@ -6,13 +6,13 @@ us to trigger events.
 
 ### Usage
 ```javascript
-Model.set(object); // returns Context
+Store.set(object); // returns Context
 ```
 
 
 ### Example
 ```javascript
-@model class Product {}
+@store class Product {}
 
 Product.listen(() => {
   // re-render component etc.

@@ -19,9 +19,9 @@ npm install hacksaw --save
 
 ### Example
 ```javascript
-import { model } from 'hacksaw';
+import { store } from 'hacksaw';
 
-@model class Product {}
+@store class Product {}
 
 Product.all; // []
 Product.context('best').all; // []

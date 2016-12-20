@@ -6,21 +6,21 @@ stores for different needs.
 
 ### Usage
 ```javascript
-Model.context(node1, node2, node3, ...);
+Store.context(node1, node2, node3, ...);
 ```
 
 
 ```javascript
-@model class Product {}
+@store class ProductStore {}
 
-Product.context('search'); // returns new class extends Product.
+ProductStore.context('search'); // returns new class extends Product.
 ```
 <br />
 
-You can use all methods on the model
+You can use all methods on the store
 
 ```javascript
-@model class Product {
+@store class Product {
   static myMethod() {
     return 'my value';
   }
@@ -39,8 +39,8 @@ Product.context('c1', 'c2') === Product.context('c1', 'c2') // true
 
 ### Example
 ```javascript
-// create Product model
-@model class Product {
+// create Product store
+@store class ProductStore {
   // a method that fetchs products with given query and limit
   async static fetch(query, limit) {
     const params = { query, limit };
@@ -52,17 +52,17 @@ Product.context('c1', 'c2') === Product.context('c1', 'c2') // true
 const query = { title_like: 'A Book' };
 
 // we are creating a context with dynamic query under search context.
-const context = Product.context('search', query);
+const context = ProductStore.context('search', query);
 
 context.fetch(query, 15); // using the method we defined above
 context.listen(renderContexts); // listen changes on the store context
 
 function renderContexts() {
   console.log(context.all);
-  // [Product(id: 141, name: 'A book'), Product(id: 13, name: 'It is a book')]
-  console.log(Product.all);
-  // [Product(id: 141, name: 'A book'), Product(id: 13, name: 'It is a book')]
-  console.log(Product.context('another context').all);
+  // [Object(id: 141, name: 'A book'), Object(id: 13, name: 'It is a book')]
+  console.log(ProductStore.all);
+  // [Object(id: 141, name: 'A book'), Object(id: 13, name: 'It is a book')]
+  console.log(ProductStore.context('another context').all);
   // []
 }
 

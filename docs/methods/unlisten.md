@@ -5,14 +5,14 @@ Removes the given callback from the store context.
 
 ### Usage
 ```javascript
-Model.unlisten(callback);
+Store.unlisten(callback);
 
 // returns context
 ```
 
 ### Example
 ```javascript
-@model class Product {}
+@store class Product {}
 
 const myCallback = () => doSomething();
 

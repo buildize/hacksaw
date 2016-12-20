@@ -94,12 +94,6 @@ describe('storeable', () => {
       expect(A.all.map(i => i.id)).to.eql([1, 2]);
     });
 
-    it ('puts new instances if argument is plain object', () => {
-      @store class A {}
-      A.put({ id: 1, name: 'test' });
-      expect(A.all[0].constructor).to.eq(A);
-    });
-
     it ('returns items back', () => {
       @store class A {}
       expect(A.put({ id: 1 }).id).to.eq(1);

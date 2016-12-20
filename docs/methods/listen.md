@@ -5,14 +5,14 @@ Adds a callback to listen updates on contexts.
 
 ### Usage
 ```javascript
-Model.listen(callback);
+Store.listen(callback);
 
 // returns context
 ```
 
 ### Example
 ```javascript
-@model class Product {}
+@store class Product {}
 
 Product.listen(() => console.log('global update'));
 Product.context('node1').listen(() => console.log('node 1 updated'));

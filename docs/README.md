@@ -10,7 +10,6 @@
   * [.last](/docs/methods/last.md)
   * [.put](/docs/methods/put.md)
   * [.populate](/docs/methods/populate.md)
-  * [.clone](/docs/methods/clone.md)
   * [.listen](/docs/methods/listen.md)
   * [.unlisten](/docs/methods/unlisten.md)
 * Overridable Methods

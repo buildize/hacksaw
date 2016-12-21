@@ -1,13 +1,10 @@
-import contextable from './contextable';
-import listenable from './listenable';
-import storeable from './storeable';
-import modelable from './modelable';
+import base from './base';
+import defaults from './defaults';
 
 export default klass => {
-  @contextable
-  @listenable
-  @storeable
-  @modelable
+  @base
+  @defaults
   class Model extends klass {}
-  return Model.context('$$base$$');
+  Model.baseContext = Model.context('$$base$$');
+  return Model.baseContext;
 }

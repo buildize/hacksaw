@@ -1,10 +1,16 @@
 import isArray from 'lodash/isArray';
+import isFunction from 'lodash/isFunction';
+import intersection from 'lodash/intersection';
+import uniq from 'lodash/uniq';
+import flatten from 'lodash/flatten';
 
 export default klass => {
   class Store extends klass {
     static contexts = {};
     static contextArray = [];
     static items = {};
+    static bindings = [];
+    static reverseBindings = [];
 
     static context(...args) {
       if (args.length === 1) {
@@ -57,11 +63,49 @@ export default klass => {
       return this;
     }
 
-    static trigger(keys) {
+    static trigger(keys, triggerBindings = true) {
       this.contextArray.forEach(context => {
         if (context.citems.find(i => keys.includes(i))) {
           context.callbacks.forEach(fn => fn());
         }
+      });
+
+      if (triggerBindings) this.triggerBindings(keys);
+    }
+
+    static triggerBindings(keys) {
+      this.bindings.forEach(binding => {
+        const remoteKeys = binding.store.all
+          .filter(item => {
+            if (isFunction(binding.property)) {
+              var value = binding.property(item);
+            } else {
+              var value = item[binding.property];
+            }
+
+            if (isArray(value)) {
+              return intersection(value, keys).length > 0;
+            } else {
+              return keys.includes(value);
+            }
+          })
+          .map(item => binding.store._getKey(item));
+
+        binding.store.trigger(remoteKeys, false);
+      });
+
+      this.reverseBindings.forEach(binding => {
+        let updateKeys = [];
+
+        keys.forEach(key => {
+          if (isFunction(binding.property)) {
+            updateKeys.push(binding.property(this.find(key)));
+          } else {
+            updateKeys.push(this.find(key)[binding.property]);
+          }
+        });
+
+        binding.store.trigger(uniq(flatten(updateKeys)), false);
       });
     }
 
@@ -111,6 +155,15 @@ export default klass => {
       const result = items.filter(fn).map(::this._getKey)
       this.citems.push(...result.filter(i => !this.citems.includes(i)))
       return this;
+    }
+
+    static bind(store, property) {
+      store.base.bindings.push({ store: this, property });
+      this.base.reverseBindings.push({ store, property });
+    }
+
+    static find(key) {
+      return this.items[key];
     }
   }
 

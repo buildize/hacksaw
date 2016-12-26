@@ -310,4 +310,66 @@ describe('base', () => {
       expect(A.last).to.eql({ id: 2 });
     });
   });
+
+
+
+  //
+  // .bind
+  //
+  describe('.bind', () => {
+    it ('triggers bound stores on change', () => {
+      @store class ProductStore {}
+      @store class UserStore {}
+
+      const spy1 = sinon.spy();
+      const spy2 = sinon.spy();
+
+      UserStore.listen(spy1);
+      ProductStore.listen(spy2);
+      UserStore.bind(ProductStore, 'product_id');
+
+      ProductStore.put({ id: 5 });
+      UserStore.put({ id: 1, product_id: 5 });
+      ProductStore.put({ id: 5, name: 'hello' });
+      ProductStore.put({ id: 5, name: 'test' });
+      ProductStore.put({ id: 6 });
+      UserStore.put({ id: 2, product_id: 6 });
+
+
+      expect(spy1.callCount).to.eq(4);
+      expect(spy2.callCount).to.eq(6);
+    });
+
+    it ('can detect array properties', () => {
+      @store class A {}
+      @store class B {}
+
+      const spy = sinon.spy();
+
+      A.listen(spy);
+      A.bind(B, 'ids');
+
+      B.put([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
+      A.put({ id: 1, ids: [1, 2, 3] });
+      B.put([{ id: 2 }, { id: 1 }]);
+
+      expect(spy.callCount).to.eq(2);
+    });
+
+    it ('can be used function property name', () => {
+      @store class A {}
+      @store class B {}
+
+      const spy = sinon.spy();
+
+      A.listen(spy);
+      A.bind(B, item => item.ids.deep());
+
+      B.put([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
+      A.put({ id: 1, ids: { deep: () => [1, 2, 3] } });
+      B.put([{ id: 2 }, { id: 1 }]);
+
+      expect(spy.calledTwice).to.be.true;
+    });
+  });
 })

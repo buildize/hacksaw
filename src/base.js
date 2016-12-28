@@ -125,8 +125,12 @@ export default klass => {
       return this;
     }
 
-    static put(items, trigger = true) {
-      if (!isArray(items)) return this.put([items])[0];
+    static replace(items) {
+      return this.put(items, true, true);
+    }
+
+    static put(items, trigger = true, replace = false) {
+      if (!isArray(items)) return this.put([items], trigger, replace)[0];
       let keys = [];
 
       items.map(item => {
@@ -134,14 +138,14 @@ export default klass => {
         if (!this.citems.includes(key)) this.citems.push(key);
         keys.push(key);
 
-        if (this.items[key]) {
+        if (this.items[key] && !replace) {
           this.items[key] = this._merge(this.items[key], item);
         } else {
           this.items[key] = item;
         }
       });
 
-      if (this.parent) this.parent.put(items, false);
+      if (this.parent) this.parent.put(items, false, replace);
 
       if (trigger) {
         this.base.trigger(keys);

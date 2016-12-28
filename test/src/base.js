@@ -276,6 +276,23 @@ describe('base', () => {
   });
 
 
+
+  //
+  // .replace method
+  //
+  describe('.remove', () => {
+    it('replaces given item with the original item', () => {
+      @store class A {}
+
+      A.context('cx1').put({ id: 1, p1: 1, p2: 2 });
+      A.context('cx2').replace({ id: 1, p1: 3 });
+
+      expect(A.context('cx1').all).to.eql([{ id: 1, p1: 3 }]);
+    });
+  });
+
+
+
   //
   // .clean method
   //

@@ -234,6 +234,48 @@ describe('base', () => {
   });
 
 
+
+  //
+  // .remove method
+  //
+  describe('.remove', () => {
+    it ('removes items on current and child contexts', () => {
+      @store class A {}
+      A.context('cx1', 'cx2').put({ id: 1, value: true });
+      A.context('cx1', 'cx2').put({ id: 2 });
+      A.context('cx2').put({ id: 1 });
+      A.context('cx1').remove(1);
+
+      expect(A.context('cx1').all).to.eql([{ id: 2 }]);
+      expect(A.context('cx1', 'cx2').all).to.eql([{ id: 2 }]);
+      expect(A.all).to.eql([{ id: 1, value: true }, { id: 2 }]);
+    });
+
+    it ('can remove multiple keys', () => {
+      @store class A {}
+      A.context('cx1').put([{ id: 1 }, { id: 2 }, { id: 3 }]);
+      A.context('cx1').remove([1, 2]);
+      expect(A.context('cx1').all).to.eql([{ id: 3 }]);
+    });
+
+    it ('triggers context branch with children', () => {
+      @store class A {}
+      const spy1 = sinon.spy();
+      const spy2 = sinon.spy();
+      const spy3 = sinon.spy();
+
+      A.context('cx1').listen(spy1);
+      A.context('cx1', 'cx2').listen(spy2).put({ id: 1 });
+      A.context('cx2').listen(spy3);
+      A.context('cx1').remove(1);
+
+      expect(spy1.callCount).to.eq(2);
+      expect(spy2.callCount).to.eq(2);
+      expect(spy3.callCount).to.eq(0);
+    });
+  });
+
+
   //
   // .clean method
   //

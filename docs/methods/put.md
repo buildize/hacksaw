@@ -7,8 +7,6 @@ Appends or updates the item both in the store context and the store.
 ```javascript
 Store.put(object)
 //or
-Store.put(modelInstance)
-//or
 Store.put(array)
 
 // returns appended or updated item array or object

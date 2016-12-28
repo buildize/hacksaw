@@ -10,6 +10,7 @@
   * [.first](/docs/methods/first.md)
   * [.last](/docs/methods/last.md)
   * [.put](/docs/methods/put.md)
+  * [.remove](/docs/methods/remove.md)
   * [.populate](/docs/methods/populate.md)
   * [.listen](/docs/methods/listen.md)
   * [.unlisten](/docs/methods/unlisten.md)

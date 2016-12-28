@@ -56,9 +56,15 @@ export default klass => {
       return this;
     }
 
-    static triggerBranch() {
+    static triggerBranch(parent = true, children = false) {
       this.callbacks.forEach(fn => fn());
-      if (this.parent) this.parent.triggerBranch();
+      if (parent && this.parent) this.parent.triggerBranch();
+
+      if (children) {
+        Object.keys(this.contexts).forEach(name => {
+          this.contexts[name].triggerBranch(false, true);
+        });
+      }
 
       return this;
     }
@@ -142,6 +148,17 @@ export default klass => {
       }
 
       return keys.map(i => this.items[i]);
+    }
+
+    static remove(keys, trigger = true) {
+      if (!isArray(keys)) return this.remove([keys]);
+
+      Object.keys(this.contexts).forEach(name => {
+        this.contexts[name].remove(keys, false);
+      });
+
+      this.citems = this.citems.filter(key => !keys.includes(key));
+      if (trigger) this.triggerBranch(true, true);
     }
 
     static clean() {

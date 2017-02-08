@@ -336,6 +336,14 @@ describe('base', () => {
       expect(A.context('cx1').all).to.eql([{ id: 1 }, { id: 2 }]);
       expect(A.context('cx2').populate(i => i.id)).to.eq(A.context('cx2'));
     });
+
+    it ('populates correcy order', () => {
+      @store class A {}
+      A.put([{ id: 1 }, { id: 0 }]);
+      const cx = A.context('cx').populate(i => i);
+
+      expect(cx.all).to.eql([{ id: 1 }, { id: 0 }]);
+    });
   });
 
 

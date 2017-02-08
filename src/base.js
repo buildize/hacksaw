@@ -172,8 +172,7 @@ export default klass => {
     }
 
     static populate(fn) {
-      const items = Object.values(this.items);
-      const result = items.filter(fn).map(::this._getKey)
+      const result = this.baseContext.all.filter(fn).map(::this._getKey)
       this.citems.push(...result.filter(i => !this.citems.includes(i)))
       return this;
     }

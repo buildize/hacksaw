@@ -21,6 +21,7 @@ export default klass => {
             static citems = [];
             static contexts = {};
             static callbacks = [];
+            static customKeys = [];
             static parent = this.base === this ? null : this;
           }
 
@@ -118,6 +119,7 @@ export default klass => {
     static set(data) {
       Object.keys(data).forEach(key => {
         this[key] = data[key];
+        this.customKeys.push(key);
       });
 
       this.triggerBranch();
@@ -167,6 +169,7 @@ export default klass => {
 
     static clean() {
       this.citems = [];
+      this.customKeys.forEach(key => this[key] = undefined);
       this.triggerBranch();
       return this;
     }

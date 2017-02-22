@@ -301,9 +301,11 @@ describe('base', () => {
       @store class A {}
       A.put({ id: 1 });
       A.put({ id: 2 });
+      A.set({ test: true });
       A.clean();
 
       expect(A.all.length).to.eq(0);
+      expect(A.test).to.be.undefined;
     });
 
     it ('returns class', () => {

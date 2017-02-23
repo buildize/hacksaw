@@ -34,7 +34,22 @@ describe('base', () => {
       @store class A {}
       expect(A.context('n', { a: 1 })).to.eq(A.context('n', { a: 1 }));
       expect(A.context('n', { a: 1 })).to.not.eq(A.context('n', { a: 2 }));
-    })
+    });
+
+    it ('allows dynamic contents via filter function', () => {
+      @store class A {}
+
+      const spy1 = sinon.spy();
+      const cx = A.context(i => i.product_id === 5);
+      cx.listen(spy1);
+      
+      A.put({ id: 1, product_id: 5 });
+      A.put({ id: 2, product_id: 3 });
+      A.put({ id: 3, product_id: 5 });
+
+      expect(cx.all.map(i => i.id)).to.eql([1, 3]);
+      expect(spy1.callCount).to.eq(2);
+    });
   });
 
 
@@ -339,7 +354,7 @@ describe('base', () => {
       expect(A.context('cx2').populate(i => i.id)).to.eq(A.context('cx2'));
     });
 
-    it ('populates correcy order', () => {
+    it ('populates correctly order', () => {
       @store class A {}
       A.put([{ id: 1 }, { id: 0 }]);
       const cx = A.context('cx').populate(i => i);

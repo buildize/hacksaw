@@ -14,7 +14,11 @@ export default klass => {
 
     static context(...args) {
       if (args.length === 1) {
-        const name = JSON.stringify(args[0]);
+        if (isFunction(args[0])) {
+          var name = args[0].toString();
+        } else {
+          var name = JSON.stringify(args[0]);
+        }
 
         if (!this.contexts[name]) {
           this.contexts[name] = class extends this {
@@ -23,6 +27,19 @@ export default klass => {
             static callbacks = [];
             static customKeys = [];
             static parent = this.base === this ? null : this;
+          }
+
+          // dynamic context
+          if (isFunction(args[0])) {
+            this.contexts[name] = class extends this.contexts[name] {
+              static _setItems() {
+                this.citems = this.baseContext.all.filter(args[0]).map(i => this._getKey(i));
+              }
+            }
+
+            this.baseContext.listen(() => {
+              this.contexts[name]._setItems();
+            });
           }
 
           this.contextArray.push(this.contexts[name]);

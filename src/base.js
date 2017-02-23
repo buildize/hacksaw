@@ -32,8 +32,14 @@ export default klass => {
           // dynamic context
           if (isFunction(args[0])) {
             this.contexts[name] = class extends this.contexts[name] {
+              static type = Function;
+
               static _setItems() {
-                this.citems = this.baseContext.all.filter(args[0]).map(i => this._getKey(i));
+                this.citems = this.parent.all.filter(args[0]).map(i => this._getKey(i));
+              }
+
+              static remove(keys) {
+                this.parent.remove(keys, false);
               }
             }
 
@@ -179,7 +185,11 @@ export default klass => {
       if (!isArray(keys)) return this.remove([keys]);
 
       Object.keys(this.contexts).forEach(name => {
-        this.contexts[name].remove(keys, false);
+        const context = this.contexts[name];
+
+        if (context.type !== Function) {
+          context.remove(keys, false);
+        }
       });
 
       this.citems = this.citems.filter(key => !keys.includes(key));

@@ -52,6 +52,10 @@ describe('base', () => {
 
       expect(cx.all.map(i => i.id)).to.eql([1, 3, 4]);
       expect(spy1.callCount).to.eq(2);
+
+      cx.remove(4);
+      expect(cx.all.map(i => i.id)).to.eql([1, 3]);
+      expect(spy1.callCount).to.eq(3);
     });
   });
 

@@ -38,16 +38,19 @@ describe('base', () => {
 
     it ('allows dynamic contents via filter function', () => {
       @store class A {}
+      A.put({ id: 1, product_id: 5 });
 
       const spy1 = sinon.spy();
       const cx = A.context(i => i.product_id === 5);
+      expect(cx.all.map(i => i.id)).to.eql([1]);
+
       cx.listen(spy1);
-      
-      A.put({ id: 1, product_id: 5 });
+
       A.put({ id: 2, product_id: 3 });
       A.put({ id: 3, product_id: 5 });
+      A.put({ id: 4, product_id: 5 });
 
-      expect(cx.all.map(i => i.id)).to.eql([1, 3]);
+      expect(cx.all.map(i => i.id)).to.eql([1, 3, 4]);
       expect(spy1.callCount).to.eq(2);
     });
   });

@@ -37,6 +37,8 @@ export default klass => {
               }
             }
 
+            this.contexts[name]._setItems();
+
             this.baseContext.listen(() => {
               this.contexts[name]._setItems();
             });

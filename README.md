@@ -45,3 +45,8 @@ ProductStore.context('another-context').first === ProductStore.first // true;
 ProductStore.context('trending').clean().all // [];
 ProductStore.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
 ```
+
+### Who Uses Hacksaw
+
+- [Coorsy](https://coorsy.com)
+- [Pincer](https://www.pincer.io)

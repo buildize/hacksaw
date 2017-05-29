@@ -1,11 +1,11 @@
-import store from './store';
+import Store from './store';
 
-export default (methods = {}) => {
-  @store class Store {}
+const defaultOptions = {
+  tables: {}
+};
 
-  Object.keys(methods).forEach(key => {
-    Store[key] = methods[key];
-  });
-
-  return Store;
+export default (opts = {}) => {
+  const options = Object.assign({}, defaultOptions, opts);
+  const store = new Store(options);
+  return store;
 }

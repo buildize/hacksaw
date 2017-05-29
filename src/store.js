@@ -1,10 +1,24 @@
-import base from './base';
-import defaults from './defaults';
+import Table from './table';
+import View from './view';
 
-export default klass => {
-  @base
-  @defaults
-  class Model extends klass {}
-  Model.baseContext = Model.context('$$base$$');
-  return Model.baseContext;
+export default class Store {
+  views = {};
+
+  constructor(options) {
+    this.tables = options.tables;
+
+    Object.keys(options.tables).forEach(table => {
+      this[table] = new Table(this, options.tables[table]);
+    });
+  }
+
+  view(...args) {
+    const name = JSON.stringify(args.join('-'));
+
+    if (!this.views[name]) {
+      this.views[name] = new View(this);
+    }
+
+    return this.views[name]
+  }
 }

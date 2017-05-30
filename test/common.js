@@ -5,3 +5,11 @@ import sinon from 'sinon';
 global.expect = chai.expect;
 global._ = lodash;
 global.sinon = sinon;
+
+global.commonTests = {  
+  implementsListener(Klass) {
+    expect(Klass.prototype.listen.constructor).to.eq(Function);
+    expect(Klass.prototype.unlisten.constructor).to.eq(Function);
+    expect(Klass.prototype.trigger.constructor).to.eq(Function);
+  }
+}

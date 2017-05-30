@@ -1,4 +1,11 @@
 import { createStore } from '../../src';
+import ViewTable from '../../src/view-table';
+
+describe('ViewTable#base', () => {
+  it('includes listenable', () => {
+    commonTests.implementsListener(ViewTable);
+  });
+});
 
 describe('ViewTable.put', () => {
   let store;

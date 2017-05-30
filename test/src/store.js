@@ -1,5 +1,12 @@
 import { createStore } from '../../src';
+import Store from '../../src/store';
 import View from '../../src/view';
+
+describe('Store#base', () => {
+  it('includes listenable', () => {
+    commonTests.implementsListener(Store);
+  });
+});
 
 describe('Store.view', () => {
   let store;

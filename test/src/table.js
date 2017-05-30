@@ -1,6 +1,12 @@
 import { createStore } from '../../src';
 import Table from '../../src/table';
 
+describe('Table#base', () => {
+  it('includes listenable', () => {
+    commonTests.implementsListener(Table);
+  });
+});
+
 describe('Table.put', () => {
   let table;
 
@@ -22,6 +28,15 @@ describe('Table.put', () => {
       const data = [{ id: 1, name: 'Phone' }, { id: 2, name: 'Pencil' }];
       const result = table.put(data);
       expect(result).to.eql(data);
+    });
+
+    it('triggers callbacks correctly', () => {
+      const data = [{ id: 1, name: 'Phone' }, { id: 2, name: 'Pencil' }];
+      const fn = sinon.spy();
+      table.listen(fn)
+      table.put(data);
+      table.put({ id: 3 });
+      expect(fn.calledTwice).to.be.true;
     });
   });
 

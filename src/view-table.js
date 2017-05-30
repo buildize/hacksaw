@@ -1,6 +1,8 @@
 import CommonTable from './common-table';
+import listenable from './listenable';
 import isArray from 'lodash/isArray';
 
+@listenable
 export default class ViewTable extends CommonTable {
   keys = [];
 

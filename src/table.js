@@ -1,10 +1,12 @@
 import CommonTable from './common-table';
+import listenable from './listenable';
 import isArray from 'lodash/isArray';
 import values from 'lodash/values';
 
 const defaultConfig = { key: 'id', relations: {} };
 
-export default class Table extends CommonTable {
+@listenable
+class Table extends CommonTable {
   data = {};
 
   constructor(store, config) {
@@ -13,9 +15,14 @@ export default class Table extends CommonTable {
     this.config = Object.assign({}, defaultConfig, config);
   }
 
-  put(object) {
-    if (isArray(object)) return object.map(item => this.put(item));
+  put(objects) {
+    if (!isArray(objects)) return this.put([objects])[0];
+    const result = objects.map(::this.__put);
+    this.trigger();
+    return result;
+  }
 
+  __put(object) {
     const key = object[this.config.key];
     this.data[key] = Object.assign({}, this.data[key], object);
 
@@ -34,3 +41,5 @@ export default class Table extends CommonTable {
     return values(this.data);
   }
 }
+
+export default Table;

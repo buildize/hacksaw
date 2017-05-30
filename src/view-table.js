@@ -7,7 +7,8 @@ import isArray from 'lodash/isArray';
 export default class ViewTable {
   keys = [];
 
-  constructor(table) {
+  constructor(view, table) {
+    this.view = view;
     this.table = table;
   }
 
@@ -22,6 +23,14 @@ export default class ViewTable {
     const result = this.table.put(object);
     const key = result[this.table.config.key];
     if (!this.keys.includes(key)) this.keys.push(key);
+
+    Object.keys(this.table.config.relations).forEach(relationKey => {
+      const relation = this.table.config.relations[relationKey];
+
+      if (object[relationKey]) {
+        this.view[relation.table].put(object[relationKey]);
+      }
+    });
 
     return result;
   }

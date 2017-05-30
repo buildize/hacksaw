@@ -28,6 +28,32 @@ describe('ViewTable.put', () => {
     view.products.put(data);
     expect(fn.callCount).to.eq(1);
   });
+
+  it('puts object to the view by relations', () => {
+    store = createStore({
+      tables: {
+        products: {
+          relations: {
+            users: {
+              type: Array,
+              table: 'users'
+            }
+          }
+        },
+        users: {}
+      }
+    })
+
+    const data = {
+      id: 1,
+      users: [{ id: 2 }, { id: 3 }]
+    };
+
+    const view = store.view('test');
+    view.products.put(data);
+    expect(view.products.first.id).to.eq(1);
+    expect(view.users.all).to.eql([{ id: 2 }, { id: 3 }]);
+  });
 });
 
 describe('ViewTable.all', () => {

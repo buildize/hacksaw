@@ -6,8 +6,10 @@ import store from './decorators/store';
 @store
 export default class View {
   constructor(store) {
+    this.store = store;
+
     Object.keys(store.tables).forEach(table => {
-      this[table] = new ViewTable(store[table]);
+      this[table] = new ViewTable(this, store[table]);
       this[table].listen(::this.trigger);
     });
   }

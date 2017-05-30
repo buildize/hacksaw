@@ -10,8 +10,9 @@ const defaultConfig = { key: 'id', relations: {} };
 class Table {
   data = {};
 
-  constructor(store, config) {
+  constructor(store, name, config) {
     this.store = store;
+    this.name = name;
     this.config = Object.assign({}, defaultConfig, config);
   }
 
@@ -35,6 +36,16 @@ class Table {
     });
 
     return this.data[key];
+  }
+
+  clean() {
+    this.data = {};
+
+    Object.keys(this.store.views).forEach(viewName => {
+      this.store.views[viewName][this.name].clean();
+    });
+
+    this.trigger();
   }
 
   get all() {

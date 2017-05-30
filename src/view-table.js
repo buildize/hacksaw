@@ -11,14 +11,24 @@ export default class ViewTable {
     this.table = table;
   }
 
-  put(object) {
-    if (isArray(object)) return object.map(item => this.put(item));
+  put(objects) {
+    if (!isArray(objects)) return this.put([objects])[0];
+    const result = objects.map(::this.__put);
+    this.trigger();
+    return result;
+  }
 
+  __put(object) {
     const result = this.table.put(object);
     const key = result[this.table.config.key];
     if (!this.keys.includes(key)) this.keys.push(key);
 
     return result;
+  }
+
+  clean() {
+    this.keys = [];
+    this.trigger();
   }
 
   get all() {

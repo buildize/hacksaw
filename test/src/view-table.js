@@ -19,6 +19,15 @@ describe('ViewTable.put', () => {
     store.view('test').products.put(data);
     expect(store.products.all).to.eql([data]);
   });
+
+  it('triggers the listeners', () => {
+    const data = [{ id: 1 }, { id: 2 }];
+    const view = store.view('test');
+    const fn = sinon.spy();
+    view.products.listen(fn);
+    view.products.put(data);
+    expect(fn.callCount).to.eq(1);
+  });
 });
 
 describe('ViewTable.all', () => {
@@ -52,5 +61,28 @@ describe('ViewTable.first, ViewTable.last', () => {
 
     expect(view.products.first).to.eql({ id: 1 });
     expect(view.products.last).to.eql({ id: 3 });
+  });
+});
+
+describe('ViewTable.clean', () => {
+  let store;
+
+  before(() => {
+    store = createStore({ tables: { products: {} } })
+  });
+
+  it('cleans all the data', () => {
+    const view = store.view('test');
+    view.products.put({ id: 1 });
+    view.products.clean();
+    expect(view.products.all).to.eql([]);
+  });
+
+  it('triggers the listeners', () => {
+    const view = store.view('test');
+    const fn = sinon.spy();
+    view.products.listen(fn);
+    view.products.clean();
+    expect(fn.calledOnce).to.be.true;
   });
 });

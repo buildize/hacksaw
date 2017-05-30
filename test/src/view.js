@@ -3,8 +3,23 @@ import View from '../../src/view';
 import ViewTable from '../../src/view-table';
 
 describe('View#base', () => {
-  it('includes listenable', () => {
+  it('includes listener', () => {
     commonTests.implementsListener(View);
+  });
+
+  it('includes store decorator', () => {
+    commonTests.implementsStore(View);
+  });
+
+  it('triggers on table changes', () => {
+    const store = createStore({ tables: { products: {}, users: {} } });
+    const view = store.view('test');
+    const fn = sinon.spy();
+    view.listen(fn);
+    view.products.put({ id: 1 });
+    view.users.put({ id: 2 });
+    view.products.clean();
+    expect(fn.callCount).to.eq(3);
   });
 });
 

@@ -103,10 +103,28 @@ describe('Table.all', () => {
 });
 
 describe('Table.first, Table.last', () => {
-  it ('returns the first and last item', () => {
+  it('returns the first and last item', () => {
     const table = new Table();
     table.put([{ id: 1 }, { id: 2 }, { id: 3 }]);
     expect(table.first).to.eql({ id: 1 });
     expect(table.last).to.eql({ id: 3 });
+  });
+});
+
+describe('Table.clean', () => {
+  it('cleans all the data', () => {
+    const table = new Table({ views: {} });
+    table.put({ id: 1 }, { id: 2 });
+    table.clean();
+    expect(table.all.length).to.eq(0);
+  });
+
+  it('cleans all view tables data', () => {
+    const store = createStore({ tables: { products: {} } });
+    store.view('test').products.put({ id: 1 });
+    store.view('test2').products.put({ id: 2 });
+    store.products.clean();
+    expect(store.view('test').products.all.length).to.eq(0);
+    expect(store.view('test2').products.all.length).to.eq(0);
   });
 });

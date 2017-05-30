@@ -1,8 +1,10 @@
 import Table from './table';
 import View from './view';
 import listener from './decorators/listener';
+import store from './decorators/store';
 
 @listener
+@store
 export default class Store {
   views = {};
 
@@ -10,7 +12,8 @@ export default class Store {
     this.tables = options.tables;
 
     Object.keys(options.tables).forEach(table => {
-      this[table] = new Table(this, options.tables[table]);
+      this[table] = new Table(this, table, options.tables[table]);
+      this[table].listen(::this.trigger);
     });
   }
 

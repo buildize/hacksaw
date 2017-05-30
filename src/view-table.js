@@ -40,6 +40,12 @@ export default class ViewTable {
     this.trigger();
   }
 
+  remove(keys) {
+    if (!isArray(keys)) return this.remove([keys]);
+    this.keys = this.keys.filter(key => !keys.includes(key));
+    this.trigger();
+  }
+
   get all() {
     return this.keys.map(key => this.table.data[key]);
   }

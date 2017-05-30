@@ -48,6 +48,20 @@ class Table {
     this.trigger();
   }
 
+  remove(keys) {
+    if (!isArray(keys)) return this.remove([keys]);
+
+    keys.forEach(key => {
+      delete(this.data[key]);
+    });
+
+    Object.keys(this.store.views).forEach(viewName => {
+      this.store.views[viewName][this.name].remove(keys);
+    });
+
+    this.trigger();
+  }
+
   get all() {
     return values(this.data);
   }

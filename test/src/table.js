@@ -128,3 +128,34 @@ describe('Table.clean', () => {
     expect(store.view('test2').products.all.length).to.eq(0);
   });
 });
+
+describe('Table.remove', () => {
+  let store;
+
+  before(() => store = createStore({ tables: { products: {} } }))
+
+  it('removes items correctly', () => {
+    store.products.put([{ id: 1 }, { id: 2 }]);
+    store.products.remove(1);
+    expect(store.products.all).to.eql([{ id: 2 }]);
+  });
+
+  it('triggers listeners', () => {
+    const fn = sinon.spy();
+    store.products.put([{ id: 1 }, { id: 2 }, { id: 3 }]);
+    store.listen(fn);
+    store.products.remove(1);
+    store.products.remove([2, 3]);
+    expect(fn.callCount).to.eq(2);
+  });
+
+  it('removes view items', () => {
+    const view1 = store.view('test1');
+    const view2 = store.view('test2');
+    view1.products.put([{ id: 1 }, { id: 2 }]);
+    view2.products.put({ id: 1 });
+    store.products.remove(1);
+    expect(view1.products.all).to.eql([{ id: 2 }]);
+    expect(view2.products.all).to.eql([]);
+  });
+});

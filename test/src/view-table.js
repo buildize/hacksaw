@@ -112,3 +112,20 @@ describe('ViewTable.clean', () => {
     expect(fn.calledOnce).to.be.true;
   });
 });
+
+describe('ViewTable.remove', () => {
+  let store;
+
+  before(() => {
+    store = createStore({ tables: { products: {} } })
+  });
+  
+  it('triggers the listeners', () => {
+    const view = store.view('test');
+    const fn = sinon.spy();
+    view.products.put([{ id: 1 }]);
+    view.products.listen(fn);
+    view.products.remove(1);
+    expect(fn.calledOnce).to.be.true;
+  });
+});

@@ -1,16 +1,16 @@
-import CommonTable from './common-table';
-import listenable from './listenable';
+import table from './decorators/table';
+import listener from './decorators/listener';
 import isArray from 'lodash/isArray';
 import values from 'lodash/values';
 
 const defaultConfig = { key: 'id', relations: {} };
 
-@listenable
-class Table extends CommonTable {
+@table
+@listener
+class Table {
   data = {};
 
   constructor(store, config) {
-    super();
     this.store = store;
     this.config = Object.assign({}, defaultConfig, config);
   }

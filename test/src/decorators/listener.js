@@ -1,9 +1,9 @@
-import listenable from '../../src/listenable';
+import listener from '../../../src/decorators/listener';
 
-@listenable
+@listener
 class TestClass {}
 
-describe('listenable.listen', () => {
+describe('listener.listen', () => {
   it('adds callbacks correctly', () => {
     const table = new TestClass();
     const fn = () => ({});
@@ -12,7 +12,7 @@ describe('listenable.listen', () => {
   });
 });
 
-describe('listenable.unlisten', () => {
+describe('listener.unlisten', () => {
   it('removes callbacks correctly', () => {
     const table = new TestClass();
     const fn1 = () => ({});
@@ -24,7 +24,7 @@ describe('listenable.unlisten', () => {
   });
 });
 
-describe('listenable.trigger', () => {
+describe('listener.trigger', () => {
   it('triggers all callbacks', () => {
     const table = new TestClass();
     const fn1 = sinon.spy();

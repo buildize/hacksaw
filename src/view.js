@@ -1,7 +1,7 @@
 import ViewTable from './view-table';
-import listenable from './listenable';
+import listener from './decorators/listener';
 
-@listenable
+@listener
 export default class View {
   constructor(store) {
     Object.keys(store.tables).forEach(table => {

@@ -1,13 +1,13 @@
-import CommonTable from './common-table';
-import listenable from './listenable';
+import table from './decorators/table';
+import listener from './decorators/listener';
 import isArray from 'lodash/isArray';
 
-@listenable
-export default class ViewTable extends CommonTable {
+@table
+@listener
+export default class ViewTable {
   keys = [];
 
   constructor(table) {
-    super();
     this.table = table;
   }
 

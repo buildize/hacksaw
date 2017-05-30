@@ -1,8 +1,8 @@
 import Table from './table';
 import View from './view';
-import listenable from './listenable';
+import listener from './decorators/listener';
 
-@listenable
+@listener
 export default class Store {
   views = {};
 

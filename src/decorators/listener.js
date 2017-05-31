@@ -11,8 +11,8 @@ export default (Klass) => {
       this.callbacks.splice(index, 1);
     }
 
-    trigger() {
-      this.callbacks.forEach(fn => fn());
+    trigger(...args) {
+      this.callbacks.forEach(fn => fn(...args));
     }
   }
 }

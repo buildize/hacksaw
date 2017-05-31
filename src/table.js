@@ -19,7 +19,7 @@ class Table {
   put(objects) {
     if (!isArray(objects)) return this.put([objects])[0];
     const result = objects.map(::this.__put);
-    this.trigger();
+    this.trigger(result.map(item => item[this.config.key]));
     return result;
   }
 
@@ -40,12 +40,7 @@ class Table {
 
   clean() {
     this.data = {};
-
-    Object.keys(this.store.views).forEach(viewName => {
-      this.store.views[viewName][this.name].clean();
-    });
-
-    this.trigger();
+    this.trigger(null, 'clean');
   }
 
   remove(keys) {
@@ -55,11 +50,7 @@ class Table {
       delete(this.data[key]);
     });
 
-    Object.keys(this.store.views).forEach(viewName => {
-      this.store.views[viewName][this.name].remove(keys);
-    });
-
-    this.trigger();
+    this.trigger(keys, 'remove');
   }
 
   get all() {

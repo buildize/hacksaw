@@ -5,6 +5,19 @@ describe('ViewTable#base', () => {
   it('includes listenable', () => {
     commonTests.implementsListener(ViewTable);
   });
+
+  it('triggers if main data change', () => {
+    const store = createStore({ tables: { products: {} } });
+    const view1 = store.view('test1');
+    const view2 = store.view('test2');
+    const fn = sinon.spy();
+
+    view1.products.put({ id: 1 });
+    view1.listen(fn);
+
+    view2.products.put({ id: 1, name: 'the name' });
+    expect(fn.calledOnce).to.be.true;
+  });
 });
 
 describe('ViewTable.put', () => {
@@ -119,7 +132,7 @@ describe('ViewTable.remove', () => {
   before(() => {
     store = createStore({ tables: { products: {} } })
   });
-  
+
   it('triggers the listeners', () => {
     const view = store.view('test');
     const fn = sinon.spy();

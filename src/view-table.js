@@ -1,6 +1,7 @@
 import table from './decorators/table';
 import listener from './decorators/listener';
 import isArray from 'lodash/isArray';
+import intersection from 'lodash/intersection';
 
 @table
 @listener
@@ -10,29 +11,31 @@ export default class ViewTable {
   constructor(view, table) {
     this.view = view;
     this.table = table;
+
+    this.table.listen(::this.handleTableChange);
   }
 
   put(objects) {
     if (!isArray(objects)) return this.put([objects])[0];
-    const result = objects.map(::this.__put);
-    this.trigger();
-    return result;
-  }
 
-  __put(object) {
-    const result = this.table.put(object);
-    const key = result[this.table.config.key];
-    if (!this.keys.includes(key)) this.keys.push(key);
-
-    Object.keys(this.table.config.relations).forEach(relationKey => {
-      const relation = this.table.config.relations[relationKey];
-
-      if (object[relationKey]) {
-        this.view[relation.table].put(object[relationKey]);
-      }
+    objects.forEach(item => {
+      const key = item[this.table.config.key]
+      if (!this.keys.includes(key)) this.keys.push(key);;
     });
 
-    return result;
+    const results = this.table.put(objects);
+
+    results.forEach(object => {
+      Object.keys(this.table.config.relations).forEach(relationKey => {
+        const relation = this.table.config.relations[relationKey];
+
+        if (object[relationKey]) {
+          this.view[relation.table].put(object[relationKey]);
+        }
+      });
+    });
+
+    return results;
   }
 
   clean() {
@@ -40,10 +43,22 @@ export default class ViewTable {
     this.trigger();
   }
 
-  remove(keys) {
-    if (!isArray(keys)) return this.remove([keys]);
+  remove(keys, trigger = true) {
+    if (!isArray(keys)) return this.remove([keys], trigger);
     this.keys = this.keys.filter(key => !keys.includes(key));
-    this.trigger();
+    if (trigger) this.trigger();
+  }
+
+  handleTableChange(keys, method) {
+    if(intersection(keys, this.keys).length) {
+      if (method === 'remove') {
+        this.remove(keys, false);
+      }
+
+      this.trigger();
+    } else if (method === 'clean') {
+      this.clean();
+    }
   }
 
   get all() {

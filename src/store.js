@@ -18,7 +18,7 @@ export default class Store {
   }
 
   view(...args) {
-    const name = JSON.stringify(args.join('-'));
+    const name = args.map(JSON.stringify).join('-');
 
     if (!this.views[name]) {
       this.views[name] = new View(this);

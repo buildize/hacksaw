@@ -37,6 +37,12 @@ describe('Store.view', () => {
     const storeView2 = store.view('login');
     expect(storeView1).to.eq(storeView2);
   });
+
+  it('allows objects as argument', () => {
+    const obj1 = { a: 1 };
+    const obj2 = { a: 2 };
+    expect(store.view('view', obj1)).to.not.eq(store.view('view', obj2));
+  });
 });
 
 describe('Store.clean', () => {

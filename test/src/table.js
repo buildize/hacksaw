@@ -128,6 +128,17 @@ describe('Table.all', () => {
     expect(table.all[0]).not.to.eq(table.all[0]);
     expect(table.all[0].deep.n).not.to.eq(table.all[0].deep.n);
   });
+
+  it('returns items with given order', () => {
+    const data = [
+      { id: 2, name: 'Phone' },
+      { id: 3, name: 'Phone 2' },
+      { id: 1, name: 'Phone 3' }
+    ];
+
+    table.put(data);
+    expect(table.all).to.eql(data);
+  });
 });
 
 describe('Table.first, Table.last', () => {

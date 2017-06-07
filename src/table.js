@@ -10,6 +10,7 @@ const defaultConfig = { key: 'id', relations: {} };
 @listener
 class Table {
   data = {};
+  keys = [];
 
   constructor(store, name, config) {
     this.store = store;
@@ -27,6 +28,7 @@ class Table {
   __put(object, replace) {
     const key = object[this.config.key];
     if (replace) this.data[key] = {};
+    if (!this.data[key]) this.keys.push(key);
     this.data[key] = cloneDeep(Object.assign({}, this.data[key], object));
 
     Object.keys(this.config.relations).forEach(relationKey => {
@@ -54,13 +56,14 @@ class Table {
 
     keys.forEach(key => {
       delete(this.data[key]);
+      this.keys = this.keys.filter(k => k !== key);
     });
 
     this.trigger(keys, 'remove');
   }
 
   get all() {
-    return cloneDeep(values(this.data));
+    return cloneDeep(this.keys.map(key => this.data[key]));
   }
 }
 

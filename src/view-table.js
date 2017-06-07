@@ -19,7 +19,7 @@ export default class ViewTable {
     if (!isArray(objects)) return this.put([objects], replace)[0];
 
     objects.forEach(item => {
-      const key = item[this.table.config.key]
+      const key = item[this.table.config.key];
       if (!this.keys.includes(key)) this.keys.push(key);;
     });
 

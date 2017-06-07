@@ -111,7 +111,7 @@ describe('ViewTable.replace', () => {
 describe('ViewTable.all', () => {
   let store;
 
-  before(() => {
+  beforeEach(() => {
     store = createStore({ tables: { products: {} } })
   });
 
@@ -122,6 +122,19 @@ describe('ViewTable.all', () => {
     view.products.put(data);
 
     expect(view.products.all).to.eql([data]);
+  });
+
+  it('returns items with given order', () => {
+    const view = store.view('test');
+
+    const data = [
+      { id: 2, name: 'Phone' },
+      { id: 3, name: 'Phone 2' },
+      { id: 1, name: 'Phone 3' }
+    ];
+
+    view.products.put(data);
+    expect(view.products.all).to.eql(data);
   });
 });
 

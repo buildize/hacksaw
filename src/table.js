@@ -48,6 +48,7 @@ class Table {
 
   clean() {
     this.data = {};
+    this.keys = [];
     this.trigger(null, 'clean');
   }
 

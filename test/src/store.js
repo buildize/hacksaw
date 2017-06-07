@@ -38,3 +38,20 @@ describe('Store.view', () => {
     expect(storeView1).to.eq(storeView2);
   });
 });
+
+describe('Store.clean', () => {
+  let store;
+
+  before(() => store = createStore({ tables: { a: {}, b: {} } }));
+
+  it('cleans the store', () => {
+    store.a.put({ id: 1 });
+    store.b.put({ id: 2 });
+    store.set({ key: 'val' });
+    store.clean();
+
+    expect(store.a.all.length).to.eq(0);
+    expect(store.b.all.length).to.eq(0);
+    expect(store.key).not.to.eq('val');
+  });
+});

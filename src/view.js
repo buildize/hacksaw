@@ -13,4 +13,10 @@ export default class View {
       this[table].listen(::this.trigger);
     });
   }
+
+  clean() {
+    Object.keys(this.store.tables).forEach(tableName => {
+      this[tableName].clean();
+    });
+  }
 }

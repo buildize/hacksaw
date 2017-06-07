@@ -31,3 +31,22 @@ describe('View.constructor', () => {
     expect(view.users.constructor).to.eq(ViewTable);
   });
 });
+
+describe('View.clean', () => {
+  let store;
+
+  before(() => store = createStore({ tables: { a: {}, b: {} } }));
+
+  it('cleans the store', () => {
+    const view = store.view('clean-test');
+
+    view.a.put({ id: 1 });
+    view.b.put({ id: 2 });
+    view.set({ key: 'val' });
+    view.clean();
+
+    expect(view.a.all.length).to.eq(0);
+    expect(view.b.all.length).to.eq(0);
+    expect(view.key).not.to.eq('val');
+  });
+});

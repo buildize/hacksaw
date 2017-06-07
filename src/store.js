@@ -26,4 +26,10 @@ export default class Store {
 
     return this.views[name]
   }
+
+  clean() {
+    Object.keys(this.tables).forEach(tableName => {
+      this[tableName].clean();
+    });
+  }
 }

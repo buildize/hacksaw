@@ -194,3 +194,23 @@ describe('ViewTable.remove', () => {
     expect(fn.calledOnce).to.be.true;
   });
 });
+
+describe('ViewTable.populate', () => {
+  let store;
+
+  before(() => {
+    store = createStore({ tables: { products: {} } })
+  });
+
+  it('adds items into the viewtable', () => {
+    store.products.put([
+      { id: 1, name: 'test1' },
+      { id: 2, name: 'test2' },
+      { id: 3, name: 'test3' }
+    ]);
+
+    const view  = store.view('test-view');
+    view.products.populate(i => i.id % 2 != 0);
+    expect(view.products.all.map(i => i.id)).to.eql([1, 3]);
+  });
+});

@@ -53,6 +53,11 @@ export default class ViewTable {
     if (trigger) this.trigger();
   }
 
+  populate(fn) {
+    const keys = this.table.all.filter(fn).map(i => i[this.table.config.key]);
+    this.keys.push(...keys.filter(i => !this.keys.includes(i)))
+  }
+
   handleTableChange(keys, method) {
     if(intersection(keys, this.keys).length) {
       if (method === 'remove') {

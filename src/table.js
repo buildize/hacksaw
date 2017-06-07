@@ -2,6 +2,7 @@ import table from './decorators/table';
 import listener from './decorators/listener';
 import isArray from 'lodash/isArray';
 import values from 'lodash/values';
+import cloneDeep from 'lodash/cloneDeep';
 
 const defaultConfig = { key: 'id', relations: {} };
 
@@ -25,7 +26,7 @@ class Table {
 
   __put(object) {
     const key = object[this.config.key];
-    this.data[key] = Object.assign({}, this.data[key], object);
+    this.data[key] = cloneDeep(Object.assign({}, this.data[key], object));
 
     Object.keys(this.config.relations).forEach(relationKey => {
       const relation = this.config.relations[relationKey];
@@ -54,7 +55,7 @@ class Table {
   }
 
   get all() {
-    return values(this.data);
+    return cloneDeep(values(this.data));
   }
 }
 

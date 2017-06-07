@@ -11,7 +11,7 @@ describe('Table.put', () => {
   let table;
 
   describe('basics', () => {
-    before(() => table = new Table());
+    beforeEach(() => table = new Table());
 
     it('puts objects correctly', () => {
       const data = { id: 12, name: 'Phone' };
@@ -37,6 +37,13 @@ describe('Table.put', () => {
       table.put(data);
       table.put({ id: 3 });
       expect(fn.calledTwice).to.be.true;
+    });
+
+    it('stores cloned object', () => {
+      const data = { id: 1, deep: { n: {} } };
+      table.put(data);
+      expect(table.data[1]).not.to.eq(data);
+      expect(table.data[1].deep).not.to.eq(data.deep);
     });
   });
 
@@ -79,7 +86,7 @@ describe('Table.put', () => {
       };
 
       store.products.put(data);
-      expect(store.products.all[0].comments[0]).to.eq(store.comments.all[0]);
+      expect(store.products.all[0].comments[0]).to.eql(store.comments.all[0]);
     });
   });
 });
@@ -87,7 +94,7 @@ describe('Table.put', () => {
 describe('Table.all', () => {
   let table;
 
-  before(() => table = new Table());
+  beforeEach(() => table = new Table());
 
   it('returns all the data', () => {
     const data = [
@@ -99,6 +106,14 @@ describe('Table.all', () => {
     table.put(data);
 
     expect(table.all).to.eql(data);
+  });
+
+  it('returns clone of the object', () => {
+    const data = { id: 1, deep: { n: {} } };
+    table.put(data);
+    expect(table.all).not.to.eq(table.all);
+    expect(table.all[0]).not.to.eq(table.all[0]);
+    expect(table.all[0].deep.n).not.to.eq(table.all[0].deep.n);
   });
 });
 

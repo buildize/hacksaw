@@ -69,6 +69,45 @@ describe('ViewTable.put', () => {
   });
 });
 
+describe('ViewTable.replace', () => {
+  let store;
+
+  before(() => {
+    store = createStore({ tables: { products: {} } })
+  });
+
+  it ('replaces all data of items', () => {
+    const view = store.view('test');
+    view.products.put({ id: 1, name: 'Test', another: 5 });
+    view.products.replace({ id: 1, name: 'Hello' });
+    expect(view.products.first.another).to.be.undefined;
+    expect(view.products.first.name).to.eq('Hello');
+  });
+
+  it('not replace relations', () => {
+    store = createStore({
+      tables: {
+        products: {
+          relations: {
+            users: {
+              type: Array,
+              table: 'users'
+            }
+          }
+        },
+        users: {}
+      }
+    });
+
+    const view = store.view('test');
+    view.products.put({ id: 1, name: 'Test', users: [{ id: 1, name: 'AUser' }] });
+    view.products.replace({ id: 1, name: 'Hello', users: [{ id: 1 }, { id: 2 }] });
+    expect(view.products.first.users.length).to.eq(2);
+    expect(view.products.first.name).to.eq('Hello');
+    expect(view.users.first.name).to.eq('AUser');
+  });
+});
+
 describe('ViewTable.all', () => {
   let store;
 

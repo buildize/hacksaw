@@ -91,6 +91,19 @@ describe('Table.put', () => {
   });
 });
 
+describe('Table.replace', () => {
+  let table;
+
+  beforeEach(() => table = new Table());
+
+  it ('replaces all data of items', () => {
+    table.put({ id: 1, name: 'Test', another: 5 });
+    table.replace({ id: 1, name: 'Hello' });
+    expect(table.first.another).to.be.undefined;
+    expect(table.first.name).to.eq('Hello');
+  });
+});
+
 describe('Table.all', () => {
   let table;
 

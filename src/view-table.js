@@ -15,15 +15,15 @@ export default class ViewTable {
     this.table.listen(::this.handleTableChange);
   }
 
-  put(objects) {
-    if (!isArray(objects)) return this.put([objects])[0];
+  put(objects, replace = false) {
+    if (!isArray(objects)) return this.put([objects], replace)[0];
 
     objects.forEach(item => {
       const key = item[this.table.config.key]
       if (!this.keys.includes(key)) this.keys.push(key);;
     });
 
-    const results = this.table.put(objects);
+    const results = this.table.put(objects, replace);
 
     results.forEach(object => {
       Object.keys(this.table.config.relations).forEach(relationKey => {
@@ -36,6 +36,10 @@ export default class ViewTable {
     });
 
     return results;
+  }
+
+  replace(objects) {
+    return this.put(objects, true);
   }
 
   clean() {

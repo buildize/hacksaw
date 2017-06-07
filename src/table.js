@@ -17,15 +17,16 @@ class Table {
     this.config = Object.assign({}, defaultConfig, config);
   }
 
-  put(objects) {
-    if (!isArray(objects)) return this.put([objects])[0];
-    const result = objects.map(::this.__put);
+  put(objects, replace = false) {
+    if (!isArray(objects)) return this.put([objects], replace)[0];
+    const result = objects.map(item => this.__put(item, replace));
     this.trigger(result.map(item => item[this.config.key]));
     return result;
   }
 
-  __put(object) {
+  __put(object, replace) {
     const key = object[this.config.key];
+    if (replace) this.data[key] = {};
     this.data[key] = cloneDeep(Object.assign({}, this.data[key], object));
 
     Object.keys(this.config.relations).forEach(relationKey => {
@@ -37,6 +38,10 @@ class Table {
     });
 
     return this.data[key];
+  }
+
+  replace(objects) {
+    return this.put(objects, true);
   }
 
   clean() {

@@ -3,11 +3,9 @@
 <br />
 
 Hacksaw is a data store library for javascript. You can store all the states
-along the app life time. For example you can store all search results without
-any effort so that if the user go back and back and back the pages will still be
-there.
+along the app life time with view stores.
 
-### Store Context
+### View Store
 The idea behind Hacksaw is contextual store which means you have one store which
 you can generate sub stores using contexts and also all model instances will be
 shared among contexts.
@@ -19,34 +17,64 @@ shared among contexts.
 npm install hacksaw --save
 ```
 
-### Example
+### Examples
 > See more example on http://hacksaw-examples.open.buildize.com
 
 ```javascript
-import { store } from 'hacksaw';
+import { createStore } from 'hacksaw';
 
-@store class ProductStore {}
+const store = createStore({
+  tables: {
+    products: {},
+    users: {
+      relations: {
+        products: {
+          type: Array,
+          table: 'products'
+        }
+      }
+    }
+  }
+});
 
-ProductStore.all; // []
-ProductStore.context('best').all; // []
-ProductStore.context('trending').all; // []
+// products table is empty
+store.products.all; // []
 
-//-----
-ProductStore.context('best').put({ id: 1, name: 'A book' });
-ProductStore.context('trending').put({ id: 2, name: 'Trending book' });
-ProductStore.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
-ProductStore.context('best').all; // [{ id: 1, name: 'A book' }]
+// create view stores
+const bestViewStore = store.view('best');
+const trendingViewStore = store.view('trending');
+bestViewStore.products.all; // []
+trendingViewStore.products.all; // []
 
-//-----
-ProductStore.context('another-context').populate(i => i.id === 1);
-ProductStore.context('another-context').first === ProductStore.first // true;
+// add a product to view store 'best'
+bestViewStore.products.put({ id: 1, name: 'A book' });
 
-//----
-ProductStore.context('trending').clean().all // [];
-ProductStore.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
+// add a product to view store 'trending'
+trendingViewStore.products.put({ id: 2, name: 'Trending book' });
+
+// global products table has 2 items
+store.products.all
+// [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
+
+// view store 'best' has 1 item
+bestViewStore.all;
+// [{ id: 1, name: 'A book' }]
+
+// create another view store and populate data
+const anotherViewStore = store.view('another-context');
+anotherViewStore.products.populate(i => i.id === 1);
+anotherViewStore.products.first
+// { id: 1, name: 'A book' }
+
+// clean trending view store
+trendingViewStore.clean();
+trendingViewStore.products.all; // []
+store.products.all // [{ id: 1, name: 'A book' }, { id: 2, name: 'Trending book' }]
+
+// add data has relations
+store.users.put({ id: 1, name: 'Plato', products: [{ id: 1, name: 'Apology' }] });
+store.users.first;
+// { id: 1, name: 'Plato', products: [{ id: 1, name: 'Apology' }] }
+store.products.all;
+// [{ id: 1, name: 'Apology' }, { id: 2, name: 'Trending book' }]
 ```
-
-### Who Uses Hacksaw
-
-- [Coorsy](https://coorsy.com)
-- [Pincer](https://www.pincer.io)

@@ -61,3 +61,84 @@ describe('Store.clean', () => {
     expect(store.key).not.to.eq('val');
   });
 });
+
+describe('Store.export and Store.import', () => {
+  let store;
+
+  before(() => store = createStore({
+    tables: {
+      a: {
+        relations: {
+          relatedObject: {
+            type: Object,
+            table: 'c'
+          }
+        }
+      },
+      b: {},
+      c: {}
+    }
+  }));
+
+  it('export all the tables and views as JSON', () => {
+    store.a.put({ id: 2, name: 'name2', relatedObject: { id: 1, name: 'namec' } });
+    store.a.put({ id: 1, name: 'name1' });
+    store.b.put({ id: 1, name: 'name1b' });
+    store.view('test').a.put([{ id: 1 }, { id: 2 }]);
+    store.view('test').b.put({ id: 1 });
+    store.view('test2').b.put({ id: 1 });
+
+    const result = {
+      tables: {
+        a: {
+          data: {
+            '1': { id: 1, name: 'name1' },
+            '2': {
+              id: 2,
+              name: 'name2',
+              relatedObject: {
+                id: 1,
+                name: 'namec'
+              }
+            }
+          },
+          keys: [2, 1]
+        },
+        b: {
+          data: {
+            '1': { id: 1, name: 'name1b' }
+          },
+          keys: [1]
+        },
+        c: {
+          data: {
+            '1': { id: 1, name: 'namec' }
+          },
+          keys: [1]
+        }
+      },
+      views: {
+        test: {
+          a: [1, 2],
+          b: [1],
+          c: [1]
+        },
+        test2: {
+          a: [],
+          b: [1],
+          c: []
+        }
+      }
+    }
+
+    expect(store.export()).to.eql(JSON.stringify(result));
+
+    const exported = store.export();
+    store.clean();
+    store.import(exported);
+
+    expect(store.c.first).to.eql({ id: 1, name: 'namec' });
+    expect(store.a.first.relatedObject).to.eql(store.c.first);
+    expect(store.view('test2').b.first.id).to.eq(1);
+  });
+});

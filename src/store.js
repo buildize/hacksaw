@@ -24,6 +24,7 @@ export default class Store {
 
     if (!this.views[name]) {
       this.views[name] = new View(this);
+      this.views[name].name = name;
     }
 
     return this.views[name]
@@ -61,7 +62,7 @@ export default class Store {
 
   import(data) {
     data = JSON.parse(data);
-    
+
     Object.keys(data.tables).forEach(tableName => {
       this[tableName].put(values(data.tables[tableName].data));
       this[tableName].keys = data.tables[tableName].keys;

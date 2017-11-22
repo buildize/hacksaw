@@ -38,15 +38,26 @@ export default class Store {
 
   export() {
     const result = {
+      _store: {},
       tables: {},
       views: {}
     };
 
+    this.storeKeys.forEach(key => {
+      result._store[key] = this[key];
+    });
+
     Object.keys(this.views).forEach(viewName => {
-      result.views[viewName] = {};
+      result.views[viewName] = {
+        _store: {}
+      };
 
       Object.keys(this.tables).forEach(tableName => {
         result.views[viewName][tableName] = this.views[viewName][tableName].keys;
+      });
+
+      this.views[viewName].storeKeys.forEach(key => {
+        result.views[viewName]._store[key] = this.views[viewName][key];
       });
     });
 
@@ -63,6 +74,10 @@ export default class Store {
   import(data) {
     data = JSON.parse(data);
 
+    Object.keys(data._store).forEach(key => {
+      this[key] = data._store[key];
+    });
+
     Object.keys(data.tables).forEach(tableName => {
       this[tableName].put(values(data.tables[tableName].data));
       this[tableName].keys = data.tables[tableName].keys;
@@ -70,6 +85,11 @@ export default class Store {
 
     Object.keys(data.views).forEach(viewName => {
       Object.keys(data.views[viewName]).forEach(tableName => {
+        if (tableName === '_store') {
+          this.view(viewName)[tableName] = data.views[viewName][tableName];
+          return;
+        }
+
         this.view(viewName)[tableName].keys = data.views[viewName][tableName];
       });
     });

@@ -84,11 +84,16 @@ describe('Store.export and Store.import', () => {
     store.a.put({ id: 2, name: 'name2', relatedObject: { id: 1, name: 'namec' } });
     store.a.put({ id: 1, name: 'name1' });
     store.b.put({ id: 1, name: 'name1b' });
+    store.set({ storeParam: 123 });
     store.view('test').a.put([{ id: 1 }, { id: 2 }]);
     store.view('test').b.put({ id: 1 });
     store.view('test2').b.put({ id: 1 });
+    store.view('test').set({ viewParam: 234 });
 
     const result = {
+      _store: {
+        storeParam: 123
+      },
       tables: {
         a: {
           data: {
@@ -119,11 +124,15 @@ describe('Store.export and Store.import', () => {
       },
       views: {
         test: {
+          _store: {
+            viewParam: 234
+          },
           a: [1, 2],
           b: [1],
           c: [1]
         },
         test2: {
+          _store: {},
           a: [],
           b: [1],
           c: []
@@ -140,5 +149,7 @@ describe('Store.export and Store.import', () => {
     expect(store.c.first).to.eql({ id: 1, name: 'namec' });
     expect(store.a.first.relatedObject).to.eql(store.c.first);
     expect(store.view('test2').b.first.id).to.eq(1);
+    expect(store.storeParam).to.eql(123);
+    expect(store.view('test').viewParam).to.eql(234);
   });
 });

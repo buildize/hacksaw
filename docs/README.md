@@ -1,11 +1,11 @@
 # Table of Contents
 
 * [Read Me](/README.md)
-* [Creating Store](/docs/creating-store.md)
+* [Creating Store](creating-store.md)
 * [Binding Relations](/docs/binding-relations.md)
 * Methods
   * [.context](/docs/methods/context.md)
-  * [.set](/docs/methods/set.md)
+  * [.set](methods/set.md)
   * [.all](/docs/methods/all.md)
   * [.first](/docs/methods/first.md)
   * [.last](/docs/methods/last.md)

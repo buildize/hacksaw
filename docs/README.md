@@ -1,6 +1,6 @@
 # Table of Contents
 
-* [Read Me](/README.md)
+* [Getting Started](getting-started.md)
 * [Creating Store](creating-store.md)
 * [Binding Relations](/docs/binding-relations.md)
 * Methods

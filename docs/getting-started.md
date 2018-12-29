@@ -6,7 +6,7 @@ The idea behind Hacksaw is contextual store which means you have one store which
 you can generate sub stores using contexts and also all model instances will be
 shared among contexts.
 
-![](diagram.png)
+![](../diagram.png)
 
 ### Installation
 ```

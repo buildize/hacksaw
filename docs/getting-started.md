@@ -1,3 +1,6 @@
+Getting Started
+===============
+
 Hacksaw is a data store library for javascript. You can store all the states
 along the app life time with view stores.
 

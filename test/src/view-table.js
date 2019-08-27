@@ -136,6 +136,15 @@ describe('ViewTable.all', () => {
     view.products.put(data);
     expect(view.products.all).to.eql(data);
   });
+
+  it('returns clone of the object', () => {
+    const view = store.view('test-clone');
+    view.products.put({ id: 55, deep: { n: {} } });
+
+    expect(view.products.all).not.to.eq(view.products.all);
+    expect(view.products.all[0]).not.to.eq(view.products.all[0]);
+    expect(view.products.all[0].deep.n).not.to.eq(view.products.all[0].deep.n);
+  });
 });
 
 describe('ViewTable.first, ViewTable.last', () => {

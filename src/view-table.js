@@ -2,6 +2,7 @@ import table from './decorators/table';
 import listener from './decorators/listener';
 import isArray from 'lodash/isArray';
 import intersection from 'lodash/intersection';
+import cloneDeep from 'lodash/cloneDeep';
 
 @table
 @listener
@@ -71,6 +72,6 @@ export default class ViewTable {
   }
 
   get all() {
-    return this.keys.map(key => this.table.data[key]);
+    return cloneDeep(this.keys.map(key => this.table.data[key]));
   }
 }

@@ -86,7 +86,11 @@ export default class Store {
     Object.keys(data.views).forEach(viewName => {
       Object.keys(data.views[viewName]).forEach(tableName => {
         if (tableName === '_store') {
-          this.view(viewName)[tableName] = data.views[viewName][tableName];
+          Object.keys(data.views[viewName]._store).forEach(key => {
+            this.view(viewName)[key] = data.views[viewName]._store[key];
+            this.view(viewName).storeKeys.push(key);
+          });
+
           return;
         }
 
